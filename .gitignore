@@ -1,5 +1,7 @@
-#secret
-secret/
+
+server/node_modules/
+server/secret/configpath.js
+
 
 # Logs
 logs
