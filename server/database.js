@@ -1,5 +1,5 @@
 import mysql from 'mysql2'
-
+import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import { config_path } from './secret/configpath.js';
 
@@ -15,14 +15,32 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DATABASE
 }).promise()
 
-export async function getNotes() {
-  const [rows] = await pool.query("select * from actor" )
-  return rows
+// module.exports = pool;
+
+export async function registerUser(username, hashedPassword, email) {
+  try {
+    const [result] = await pool.query(`
+      INSERT INTO Users (username, password, email)
+      VALUES (?, ?, ?)
+    `, [username, hashedPassword, email]);
+
+    // Optionally, you can get the inserted user's ID if needed
+    // const userId = result.insertId;
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
 }
-export async function deleteNote() {
-  const [rows] = await pool.query("delete from actor where act_id=305" )
-  return getNotes()
-}
+
+// export async function getNotes() {
+//   const [rows] = await pool.query("select * from actor" )
+//   return rows
+// }
+// export async function deleteNote() {
+//   const [rows] = await pool.query("delete from actor where act_id=305" )
+//   return getNotes()
+// }
 
 // export async function getNote(id) {
 //   const [rows] = await pool.query(`
@@ -33,11 +51,23 @@ export async function deleteNote() {
 //   return rows[0]
 // }
 
-export async function createNote(act_id, act_name,act_gender) {
-  const [result] = await pool.query(`
-  INSERT INTO actor (act_id, act_name,act_gender)
-  VALUES (?, ?, ?)
-  `, [act_id, act_name,act_gender])
-//   const id = result.insertId
-  return getNotes();
-}
+
+
+// export async function loginUser(username, password) {
+//   const query = 'SELECT * FROM Users WHERE username = ?';
+//   const values = [username];
+
+//   const [user] = await executeQuery(query, values);
+
+//   if (!user) {
+//     throw new Error('User not found');
+//   }
+
+//   const isValidPassword = await bcrypt.compare(password, user.password);
+
+//   if (!isValidPassword) {
+//     throw new Error('Invalid password');
+//   }
+
+//   return user;
+// }
