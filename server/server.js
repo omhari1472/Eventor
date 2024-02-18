@@ -1,5 +1,6 @@
 import express from 'express'
 // import router from './routes/authRoutes'
+import cors from 'cors'; 
 import router from './routes/authRoutes.js';
 
 // import routes from './routes.js'; // Adjust the path and extension accordingly
@@ -8,6 +9,7 @@ import router from './routes/authRoutes.js';
 // import { registerUser  } from './database.js'
 
 const app = express()
+app.use(cors()); 
 app.use(express.json());
 
 // app.use(express.json())
@@ -49,6 +51,6 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke 💩')
 })
 
-app.listen(3000, () => {
+app.listen(4000, () => {
   console.log('Server is running on port 4000')
 })

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +13,12 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+
+import usePrivateRoute from './usePrivateRoute';
+
+ 
+
 
 function Copyright(props) {
   return (
@@ -30,15 +37,35 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function LogIn() {
-  const handleSubmit = (event) => {
+export default function LogIn({ setIsAuthenticated }) {
+
+  const navigate = useNavigate();
+  
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    try {
+      const response = await axios.post('http://localhost:4000/auth/login', {
+        email: data.get('email'),
+        password: data.get('password'),
+      });
+
+      if (response.status === 200) {
+        setIsAuthenticated(true);
+        navigate('/welcome');        
+         // Set isAuthenticated to true upon successful login
+      } else {
+        // Handle login failure, display an error message or take appropriate action
+        console.error('Login unsuccessful:', response.data.error);
+      }
+    } catch (error) {
+      // Handle errors
+      console.error('Error during login:', error);
+    }
   };
+  usePrivateRoute(true);
+
 
   return (
     <ThemeProvider theme={defaultTheme}>

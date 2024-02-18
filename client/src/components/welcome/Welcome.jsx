@@ -1,9 +1,16 @@
-import React from 'react'
+import React from 'react';
+import usePrivateRoute from '../login/usePrivateRoute'; // Adjust the path as needed
+import ButtonAppBar from './component/AppBar';
 
-export default function Welcome() {
+const WelcomePage = ({ isAuthenticated }) => {
+  // Use the usePrivateRoute hook to secure the route
+  usePrivateRoute(isAuthenticated);
+
   return (
-    <div>
-      welcome
-    </div>
-  )
-}
+    <React.Fragment>
+    <ButtonAppBar />
+    </React.Fragment>
+  );
+};
+
+export default WelcomePage;

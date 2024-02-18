@@ -1,4 +1,5 @@
 import {registerUser} from '../queries/LoginQueries'
+import bcrypt from 'bcrypt';
 
 async function registerUserController(req, res) {
   const { username, password, email } = req.body;

@@ -1,7 +1,7 @@
 import pool from './db.js';
 // import bcrypt from 'bcrypt';
 
-async function registerUser(username, hashedPassword, email) {
+export async function registerUser(username, hashedPassword, email) {
   try {
     const [result] = await pool.query(`
       INSERT INTO Users (username, password, email)
@@ -17,4 +17,13 @@ async function registerUser(username, hashedPassword, email) {
   }
 }
 
-export { registerUser };
+
+export async function loginUser(email) {
+  try {
+    const [userRows] = await pool.query('SELECT * FROM Users WHERE email = ?', [email]);
+    return userRows.length > 0 ? userRows[0] : null;
+  } catch (error) {
+    throw error;
+  }
+}
+

@@ -1,17 +1,29 @@
+import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import SignUp from './components/signup/SignUp';
 import Welcome from './components/welcome/Welcome';
 import LogIn from './components/login/LogIn';
 
-function App() {
+const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   return (
-    <Routes>
-      <Route path='/signup' element={<SignUp/>} />
-      <Route path='/login' element={<LogIn/>} />
-      <Route path='/welcome' element={<Welcome/>} />
-    </Routes>
+      <Routes>
+        <Route
+          path="/signup"
+          element={<SignUp setIsAuthenticated={setIsAuthenticated} />}
+        />
+        <Route
+          path="/login"
+          element={<LogIn setIsAuthenticated={setIsAuthenticated} />}
+        />
+        <Route
+          path="/welcome"
+          element={<Welcome isAuthenticated={isAuthenticated} />}
+        />
+      </Routes>
   );
-}
+};
 
 export default App;
