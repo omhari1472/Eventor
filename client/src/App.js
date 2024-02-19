@@ -4,6 +4,7 @@ import './App.css';
 import SignUp from './components/signup/SignUp';
 import Welcome from './components/welcome/Welcome';
 import LogIn from './components/login/LogIn';
+import Dashboard from './components/dashboard/Dashboard';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -21,6 +22,10 @@ const App = () => {
         <Route
           path="/welcome"
           element={<Welcome isAuthenticated={isAuthenticated} />}
+        />
+        <Route
+          path="/dashboard"
+          element={<Dashboard/>}
         />
       </Routes>
   );
