@@ -1,6 +1,10 @@
 import * as React from "react";
 import './Dashboard.css'
-export default function Dashboard() {
+import usePrivateRoute from "../login/usePrivateRoute";
+  
+const Dashboard = ({ isAuthenticated }) => {
+    // Use the usePrivateRoute hook to secure the route
+    usePrivateRoute(isAuthenticated);
   return (
     <>
   <header className="header" data-header="">
@@ -764,3 +768,5 @@ export default function Dashboard() {
     </>
   )
 }
+
+export default Dashboard;

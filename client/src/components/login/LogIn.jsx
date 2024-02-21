@@ -53,7 +53,7 @@ export default function LogIn({ setIsAuthenticated }) {
 
       if (response.status === 200) {
         setIsAuthenticated(true);
-        navigate('/welcome');        
+        navigate('/dashboard');        
          // Set isAuthenticated to true upon successful login
       } else {
         // Handle login failure, display an error message or take appropriate action
