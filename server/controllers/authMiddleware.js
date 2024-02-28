@@ -12,7 +12,7 @@ export async function authenticateUser(req, res, next) {
   try {
     const decoded = jwt.verify(token, "eventor");
 
-    console.log('Decoded Token:', decoded); // Log the decoded token for troubleshooting
+    // console.log('Decoded Token:', decoded); // Log the decoded token for troubleshooting
 
     const [userRows] = await pool.query('SELECT * FROM Users WHERE email = ?', [decoded.email]);
 

@@ -33,7 +33,7 @@ export default function Event({isAuthenticated}){
         eventType: data.get('eventtype'),
         eventDate: data.get('eventdate'),
         eventTime: data.get('eventtime'),
-        venueId: data.get('venueid'),
+        venueID: data.get('venueid'),
       };
   
       const authToken = localStorage.getItem('authToken');

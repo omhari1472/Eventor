@@ -11,7 +11,7 @@ export async function matchTokenFormat(req, res, next) {
     console.log(token);
     const decoded = jwt.verify(token, 'eventor');
 
-    console.log('Decoded Token2:', decoded); // Log the decoded token for troubleshooting
+    // console.log('Decoded Token2:', decoded); // Log the decoded token for troubleshooting
 
     const [userRows] = await pool.query('SELECT * FROM Users WHERE email = ?', [decoded.email]);
 
