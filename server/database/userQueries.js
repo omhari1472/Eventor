@@ -27,3 +27,13 @@ export async function loginUser(email) {
   }
 }
 
+
+export async function getVenues() {
+  try {
+    const [rows, fields] = await pool.query('SELECT * FROM venues');
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+

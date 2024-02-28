@@ -6,12 +6,21 @@ import Welcome from './components/welcome/Welcome';
 import LogIn from './components/login/LogIn';
 import Dashboard from './components/dashboard/Dashboard';
 import Event from './components/event/Event';
+import Venue from './components/venue/Venue';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
       <Routes>
+         <Route
+          path="/"
+          element={<Event/>}
+        />
+         <Route
+          path="/venue"
+          element={<Venue/>}
+        />
         <Route
           path="/signup"
           element={<SignUp setIsAuthenticated={setIsAuthenticated} />}
@@ -20,9 +29,10 @@ const App = () => {
           path="/login"
           element={<LogIn setIsAuthenticated={setIsAuthenticated} />}
         />
+        
         <Route
           path="/event"
-          element={<Event/>}
+          element={<Event isAuthenticated={isAuthenticated} />}
         />
         <Route
           path="/welcome"

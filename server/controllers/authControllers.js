@@ -1,6 +1,7 @@
 import { registerUser } from '../database/userQueries.js';
 import pool from '../database/db.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export async function registerUserController(req, res) {
   const { username, password, email } = req.body;
@@ -9,15 +10,12 @@ export async function registerUserController(req, res) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const registrationResult = await registerUser(username, hashedPassword, email);
 
-    // Adjust the response based on your application's needs
     res.status(201).send({ message: 'User registered successfully', user: registrationResult });
   } catch (error) {
     console.error('Error registering user:', error);
-    // Adjust the response based on your error handling strategy
     res.status(500).send({ error: 'Internal Server Error' });
   }
 }
-
 
 export async function loginUserController(req, res) {
   const { email, password } = req.body;
@@ -39,13 +37,19 @@ export async function loginUserController(req, res) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // You can create and send a token for authentication if the login is successful
-    // For simplicity, I'll just send a success message here
-    res.status(200).json({ message: 'Login successful', user: { username: user.username, email: user.email } });
+    // Create and send a JWT token for authentication
+    const token = jwt.sign({ userId: user.id, email: user.email }, "eventor", { expiresIn: '1h' });
+
+    res.status(200).json({
+      message: 'Login successful',
+      user: { username: user.username, email: user.email },
+      token,
+    });
+    console.log("token",token);
+
 
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-

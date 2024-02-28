@@ -52,7 +52,17 @@ export default function LogIn({ setIsAuthenticated }) {
       });
 
       if (response.status === 200) {
+        const { token, user } = response.data;
+
+        // Save the token to localStorage
+        localStorage.setItem('authToken', token);
+  
+        // You can also store other user-related information if needed
+        localStorage.setItem('user', JSON.stringify(user));
+  
+        console.log("Authent",localStorage.getItem('authToken'));
         setIsAuthenticated(true);
+
         navigate('/dashboard');        
          // Set isAuthenticated to true upon successful login
       } else {

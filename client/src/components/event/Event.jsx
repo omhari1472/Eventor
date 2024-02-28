@@ -10,27 +10,41 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-import usePrivateRoute from '../login/usePrivateRoute';
+import usePrivateRoute from '../login/usePrivateRoute'; // Adjust the path as needed
 import { useNavigate } from 'react-router-dom';
 import { MenuItem } from '@mui/material';
 
 
 const defaultTheme = createTheme();
 
-export default function Event(){
-  const navigate = useNavigate();
+export default function Event({isAuthenticated}){
+  usePrivateRoute(isAuthenticated);
+  console.log("Authent",localStorage.getItem('authToken'));
+
+  // const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+  
     try {
-      const response = await axios.post('http://localhost:4000/auth/register', {
-        username: data.get('username'),
-        email: data.get('email'),
-        password: data.get('password'),
-      });
+      const eventData = {
+        eventName: data.get('eventname'),
+        eventType: data.get('eventtype'),
+        eventDate: data.get('eventdate'),
+        eventTime: data.get('eventtime'),
+        venueId: data.get('venueid'),
+      };
+  
+      const authToken = localStorage.getItem('authToken');
 
+      const response = await axios.post('http://localhost:4000/auth/event', eventData, {
+        headers: {
+          Authorization: `${authToken}`,
+        },
+      });
+      
+  
       // Handle the response as needed
       console.log('Response from server:', response.data);
     } catch (error) {
@@ -38,6 +52,8 @@ export default function Event(){
       console.error('Error submitting form:', error);
     }
   };
+  
+  
   usePrivateRoute(true);
 
 
@@ -66,9 +82,9 @@ export default function Event(){
                 margin="normal"
                 required
                 fullWidth
-                id="eventName"
+                id="eventname"
                 label="Event Name"
-                name="eventName"
+                name="eventname"
                 autoComplete="off"
                 autoFocus
               />
@@ -77,9 +93,9 @@ export default function Event(){
                 margin="normal"
                 required
                 fullWidth
-                id="eventType"
+                id="eventtype"
                 label="Event Type"
-                name="eventType"
+                name="eventtype"
                 autoComplete="off"
                 autoFocus
                 >
@@ -96,9 +112,9 @@ export default function Event(){
                 margin="normal"
                 required
                 fullWidth
-                id="eventDate"
+                id="eventdate"
                 label="Event Date"
-                name="eventDate"
+                name="eventdate"
                 type='date'
                 autoComplete="off"
                 autoFocus
@@ -107,10 +123,10 @@ export default function Event(){
                 margin="normal"
                 required
                 fullWidth
-                id="eventTime"
+                id="eventtime"
                 label="Event Time"
                 type='time'
-                name="eventTime"
+                name="eventtime"
                 autoComplete="off"
                 autoFocus
               />
@@ -120,19 +136,19 @@ export default function Event(){
                 margin="normal"
                 required
                 fullWidth
-                id="venueId"
+                id="venueid"
                 label="Venue"
-                name="venueId"
+                name="venueid"
                 autoComplete="off"
                 autoFocus
                 >
-                <MenuItem value="Wedding">Wedding</MenuItem>
-                <MenuItem value="Birthday Paries">Birthday Paries</MenuItem>
-                <MenuItem value="Annivesaries">Annivesaries</MenuItem>
-                <MenuItem value="Graduation parties">Graduation parties</MenuItem>
-                <MenuItem value="Exhibtions">Exhibtions</MenuItem>
-                <MenuItem value="Conferences">Conferences</MenuItem>
-                <MenuItem value="Seminars">Seminars</MenuItem>
+                <MenuItem value="1">Wedding</MenuItem>
+                <MenuItem value="2">Birthday Paries</MenuItem>
+                <MenuItem value="3">Annivesaries</MenuItem>
+                <MenuItem value="4">Graduation parties</MenuItem>
+                <MenuItem value="5">Exhibtions</MenuItem>
+                <MenuItem value="6">Conferences</MenuItem>
+                <MenuItem value="7">Seminars</MenuItem>
                 </TextField>
 
               <Button

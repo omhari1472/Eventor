@@ -1,13 +1,27 @@
 import * as React from "react";
 import './Dashboard.css'
+import { useNavigate } from 'react-router-dom';
 import usePrivateRoute from "../login/usePrivateRoute";
   
 const Dashboard = ({ isAuthenticated }) => {
     // Use the usePrivateRoute hook to secure the route
     usePrivateRoute(isAuthenticated);
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+      // Navigate to the "/event" route when the button is clicked
+      navigate('/event');
+    };
+  
   return (
     <>
   <header className="header" data-header="">
+  
+  <button onClick={handleClick}>
+        Event
+      </button>
+
+
     <div className="container">
       <a href="#">
         <h1 className="logo">Tourest</h1>
