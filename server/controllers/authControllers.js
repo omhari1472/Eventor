@@ -1,5 +1,5 @@
 import { registerUser } from '../database/userQueries.js';
-import pool from '../database/db.js';
+import {pool} from '../database/db.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 

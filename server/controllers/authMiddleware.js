@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import pool from '../database/db.js';
+import {pool} from '../database/db.js';
 
 
 export async function authenticateUser(req, res, next) {

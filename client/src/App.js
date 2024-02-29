@@ -7,6 +7,8 @@ import LogIn from './components/login/LogIn';
 import Dashboard from './components/dashboard/Dashboard';
 import Event from './components/event/Event';
 import Venue from './components/venue/Venue';
+import Checkout from './components/payment/Checkout';
+import RSVPInvitation from './components/invitation/RSVPInvitation';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -20,6 +22,14 @@ const App = () => {
          <Route
           path="/venue"
           element={<Venue/>}
+        />
+         <Route
+          path="/checkout"
+          element={<Checkout/>}
+        />
+         <Route
+          path="/invitation"
+          element={<RSVPInvitation/>}
         />
         <Route
           path="/signup"

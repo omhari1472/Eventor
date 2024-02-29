@@ -1,4 +1,4 @@
-import pool from './db.js';
+import {pool} from './db.js';
 
 export async function createEvent(eventname, eventtype, eventdate, eventtime, venueid, email) {
     try {

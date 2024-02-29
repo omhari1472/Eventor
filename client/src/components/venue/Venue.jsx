@@ -22,9 +22,9 @@ export default function Venue() {
   }, []); // The empty dependency array ensures that this effect runs only once, similar to componentDidMount
 
   return (
-    <div>
+    <div style={{ display: "flex",  flexWrap: "wrap", maxWidth:"100%",overflow:"hidden", justifyContent: "space-between", padding:"3rem" }}>
       {venues.map(venue => (
-        <Card key={venue.venueID} sx={{ maxWidth: 345 }}>
+        <Card style={{margin:"1rem"}} key={venue.venueID} sx={{ maxWidth: 345 }}>
           <CardActionArea>
             <CardMedia
               component="img"

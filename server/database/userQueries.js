@@ -1,4 +1,4 @@
-import pool from './db.js';
+import {pool} from './db.js';
 // import bcrypt from 'bcrypt';
 
 export async function registerUser(username, hashedPassword, email) {
