@@ -45,7 +45,7 @@ export async function loginUserController(req, res) {
       user: { username: user.username, email: user.email },
       token,
     });
-    console.log("token",token);
+    // console.log("token",token);
 
 
   } catch (error) {

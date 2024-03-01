@@ -19,20 +19,6 @@ import usePrivateRoute from './usePrivateRoute';
 
  
 
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
@@ -63,7 +49,7 @@ export default function LogIn({ setIsAuthenticated }) {
         console.log("Authent",localStorage.getItem('authToken'));
         setIsAuthenticated(true);
 
-        navigate('/dashboard');        
+        navigate('/home');        
          // Set isAuthenticated to true upon successful login
       } else {
         // Handle login failure, display an error message or take appropriate action
@@ -74,15 +60,41 @@ export default function LogIn({ setIsAuthenticated }) {
       console.error('Error during login:', error);
     }
   };
+
+  const containerStyle = {
+    background: 'rgba(255, 255, 255, 0.18)',
+    borderRadius: '16px',
+    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+    backdropFilter: 'blur(3.5px)',
+    WebkitBackdropFilter: 'blur(3.5px)',
+    border: '1px solid rgba(255, 255, 255, 0.69)',
+    objectFit:'contain',
+    color:'white',
+    margin:'auto',
+    height:'70vh',
+
+  };
+  
+
   usePrivateRoute(true);
 
 
   return (
+    <div style={{backgroundImage:`url(./images/background.jpg)`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    height:'100vh',
+    maxWidth:'100%',
+    backgroundPosition: 'center',
+    display:'flex',
+    justifyContent:'center'
+    }}>
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+
+      <Grid container component="main"  sx={{ height: '100vh' }}>
         <CssBaseline />
        
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} style={containerStyle} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -143,25 +155,11 @@ export default function LogIn({ setIsAuthenticated }) {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
       </Grid>
     </ThemeProvider>
+    </div>
   );
 }

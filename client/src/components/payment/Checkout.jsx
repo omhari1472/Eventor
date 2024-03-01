@@ -1,30 +1,28 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
+import Header from '../header/Header';
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
+const steps = ['Billing address', 'Payment Details', 'Review your Bill'];
 
 function getStepContent(step) {
   switch (step) {
     case 0:
       return <AddressForm />;
-    case 1:
-      return <PaymentForm />;
+      case 1:
+        return <PaymentForm />;
     case 2:
-      return <Review />;
+        return <Review />;
     default:
       throw new Error('Unknown step');
   }
@@ -44,7 +42,7 @@ export default function Checkout() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar
+      {/* <AppBar
         position="absolute"
         color="default"
         elevation={0}
@@ -58,7 +56,8 @@ export default function Checkout() {
             Eventor
           </Typography>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
+      <Header />
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">

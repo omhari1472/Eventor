@@ -4,11 +4,14 @@ import { sendInvitations } from '../database/sendInvitation.js';
 export const sendInvitationsController = async (req, res) => {
   try {
     console.log('Before sending invitations');
-    
+
+    // Extract the guests data from the request body
+    const { guests } = req.body;
+
     // Additional logic related to handling RSVPs can be added here if needed
 
-    // Sending invitations
-    const response = await sendInvitations();
+    // Sending invitations with the received guests data
+    const response = await sendInvitations(guests);
 
     // Respond with a success message or any other appropriate response
     res.status(200).json({ message: 'Invitations sent successfully', response });

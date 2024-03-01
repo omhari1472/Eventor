@@ -8,7 +8,7 @@ export async function matchTokenFormat(req, res, next) {
   }
 
   try {
-    console.log(token);
+    // console.log(token);
     const decoded = jwt.verify(token, 'eventor');
 
     // console.log('Decoded Token2:', decoded); // Log the decoded token for troubleshooting

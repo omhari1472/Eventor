@@ -37,3 +37,26 @@ export async function getVenues() {
   }
 }
 
+export async function getEventGuest() {
+  try {
+    const [rows, fields] = await pool.query('SELECT * FROM EventGuests');
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteEventGuest(eventGuestID) {
+  try {
+    // Use a SQL DELETE query to delete the guest by its ID
+    const query = 'DELETE FROM EventGuests WHERE eventGuestID = ?';
+    const [result] = await pool.query(query, [eventGuestID]);
+
+    return result; // You can adjust the return value based on your needs
+  } catch (error) {
+    console.error('Error deleting event guest:', error);
+    throw error; // Propagate the error to the caller
+  }
+}
+
+

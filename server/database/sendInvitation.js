@@ -12,11 +12,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendInvitations() {
+// Update the function to accept guests as a parameter
+export async function sendInvitations(guests) {
   try {
-    // Fetch guest emails from the database
-    const guests = await executeQuery('SELECT guestName, guestEmail, eventID FROM EventGuests');
-
     // Use Promise.all to wait for all emails to be sent
     await Promise.all(guests.map(async (guest) => {
       const { guestName, guestEmail, eventID } = guest;
@@ -25,9 +23,16 @@ export async function sendInvitations() {
         from: 'omhari1472@gmail.com',
         to: guestEmail,
         subject: 'RSVP Invitation',
-        html: `<p>Dear ${guestName},</p>
-               <p>You are invited to our event. Please RSVP by clicking the link below:</p>
-               <a href="http://your-website.com/rsvp?eventId=${eventID}&guestEmail=${guestEmail}">RSVP Now</a>`,
+        html: `
+          <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBUWFRgVFRYZGBgaGhgaGhgYGhgYGBgaGhwZGhoaGBocIS4lHB4rHxgYJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHxISHzUrJCQ0NDQ0NDQ0REhESEhIRExQREBAQEBAQEBAQEBAQEBAQEBAQEBERAREBERAREBEAREBEBAQEBAQEBAQEBAQEBAQEBAQF/9k=') center center/cover no-repeat;">
+            <h2 style="text-align: center; color: #fff;">You're Invited!</h2>
+            <p style="text-align: center; color: #fff;">Dear ${guestName},</p>
+            <p style="text-align: center; color: #fff;">You are invited to our event. Please RSVP by clicking the link below:</p>
+            <div style="text-align: center; margin-top: 20px;">
+              <a href="http://your-website.com/rsvp?eventId=${eventID}&guestEmail=${guestEmail}" style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: #fff; text-decoration: none; border-radius: 5px;">RSVP Now</a>
+            </div>
+          </div>
+        ` 
       };
 
       await transporter.sendMail(mailOptions);
@@ -48,9 +53,9 @@ export async function sendInvitations() {
 }
 
 // Function to start sending invitations
-async function startInvitations() {
+async function startInvitations(guests) {
   try {
-    const response = await sendInvitations();
+    const response = await sendInvitations(guests);
     console.log(response); // Log the response
   } catch (error) {
     console.error('Error:', error);
