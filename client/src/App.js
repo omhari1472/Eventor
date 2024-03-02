@@ -13,6 +13,7 @@ import EventGuest from './components/eventguest/EventGuest';
 import ResponsiveAppBar from './components/header/Test';
 import Home from './components/dashboard/Dashboard';
 import ContactUs from './components/contactus/ContactUs';
+import Profile from './components/profile/Profile';
 // import WelcomePage from './components/welcome/Welcome';
 
 const App = () => {
@@ -36,6 +37,10 @@ const App = () => {
          <Route
           path="/welcome"
           element={<Welcome />}
+        />
+         <Route
+          path="/profile"
+          element={<Profile />}
         />
          <Route
           path="/rsvp"

@@ -19,6 +19,7 @@ export async function createEvent(eventname, eventtype, eventdate, eventtime, ve
         VALUES (?, ?, ?, ?, ?, ?)
       `, [eventname, eventtype, eventdate, eventtime, venueid, userRows[0].userID]);
 
+
       // Optionally, you can get the inserted event's ID if needed
       // const eventId = result.insertId;
 
@@ -28,6 +29,41 @@ export async function createEvent(eventname, eventtype, eventdate, eventtime, ve
     }
 }
 
+
+// export async function getEventById(eventId) {
+//   const query = 'SELECT * FROM events WHERE eventID = ?';
+
+//   try {
+//     const [result] = await pool.query(query, [eventId]);
+
+//     if (result.length > 0) {
+//       return result[0];
+//     }
+
+//     return null; // Return null if event is not found
+//   } catch (error) {
+//     console.error('Error fetching event by ID:', error);
+//     throw error;
+//   }
+// }
+
+export async function getAllEvents(userID) {
+  const query = `
+  SELECT e.*, u.*
+  FROM events e
+  JOIN users u ON e.userid = u.userid
+  WHERE u.userid = ?
+`;
+// console.log("query",userID);
+
+  try {
+    const [result] = await pool.query(query, [userID]); 
+    return result;
+  } catch (error) {
+    console.error('Error fetching all events:', error);
+    throw error;
+  }
+}
 
 export async function postEventGuest(email, guestName, guestEmail) {
     try {

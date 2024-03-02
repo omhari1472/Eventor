@@ -1,4 +1,4 @@
-import { createEvent, postEventGuest } from '../database/eventQueries.js';
+import { createEvent, getAllEvents, postEventGuest } from '../database/eventQueries.js';
 import { deleteEventGuest, getEventGuest, getVenues } from '../database/userQueries.js';// Replace with your actual venue module
 
 export async function getVenuesController(req, res) {
@@ -21,6 +21,7 @@ export async function getVenuesController(req, res) {
 export async function createEventController(req, res) {
     const { eventName, eventType, eventDate, eventTime, venueID } = req.body;
     const userID = req.user.id; 
+    // console.log("Creating user Id",req.user.userID);
 
     try {
       const result = await createEvent(eventName, eventType, eventDate, eventTime, venueID, req.user.email); // Pass user email
@@ -33,6 +34,47 @@ export async function createEventController(req, res) {
       res.status(500).send({ error: 'Internal Server Error' });
     }
 }
+
+export async function getEventController(req, res) {
+  const userID = req.user.userID
+  ; 
+  // console.log("Creating user Id",req.user.userID);
+
+
+  try {
+    // Fetch event details from the data access layer
+    const eventDetails = await getAllEvents(userID);
+
+    if (!eventDetails) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    // Adjust the response based on your application's needs
+    res.status(200).json({ eventDetails });
+  } catch (error) {
+    console.error('Error fetching event details:', error);
+    // Adjust the response based on your error handling strategy
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+// export async function getEventController(req, res) {
+//   try {
+//     // Fetch all events from the data access layer
+//     const allEvents = await getAllEvents();
+
+//     // Adjust the response based on your application's needs
+//     res.status(200).json({ allEvents });
+//   } catch (error) {
+//     console.error('Error fetching all events:', error);
+//     // Adjust the response based on your error handling strategy
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// }
+
+// Add a new function to get all events from the database
+
+
 
 export async function postEventGuestController(req, res) {
   const { guestName, guestEmail } = req.body;

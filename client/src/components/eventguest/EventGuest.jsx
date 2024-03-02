@@ -18,7 +18,8 @@ import "react-toastify/dist/ReactToastify.css";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';import IconButton from "@mui/material/IconButton";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import IconButton from "@mui/material/IconButton";
 const defaultTheme = createTheme();
 
 export default function EventGuest({ isAuthenticated }) {
@@ -55,8 +56,7 @@ export default function EventGuest({ isAuthenticated }) {
       console.log("Updated guests:", updatedGuests);
       console.log("Updated guest:", response.data.newGuest);
       setGuests(updatedGuests);
-  
-      
+
       toast.success("Guest Added Successfully");
 
       // Handle the response as needed
@@ -82,23 +82,26 @@ export default function EventGuest({ isAuthenticated }) {
       });
   }, []);
 
-// Example code where you call the delete function
-const handleDelete = async (eventGuestID) => {
-  try {
-    // Make a DELETE request to delete the guest
-    const response = await axios.delete(`http://localhost:4000/auth/guest/${eventGuestID}`);
-    console.log('Response after deleting:', response.data);
+  // Example code where you call the delete function
+  const handleDelete = async (eventGuestID) => {
+    try {
+      // Make a DELETE request to delete the guest
+      const response = await axios.delete(
+        `http://localhost:4000/auth/guest/${eventGuestID}`
+      );
+      console.log("Response after deleting:", response.data);
 
-    // Update the state to remove the deleted guest
-    toast.error("Guest Deleted successfully");
-    const updatedGuests = guests.filter(guest => guest.eventGuestID !== eventGuestID);
-    setGuests(updatedGuests);
-  } catch (error) {
-    console.error('Error deleting guest:', error);
-    // Handle error
-  }
-};
-
+      // Update the state to remove the deleted guest
+      toast.error("Guest Deleted successfully");
+      const updatedGuests = guests.filter(
+        (guest) => guest.eventGuestID !== eventGuestID
+      );
+      setGuests(updatedGuests);
+    } catch (error) {
+      console.error("Error deleting guest:", error);
+      // Handle error
+    }
+  };
 
   usePrivateRoute(true);
 
@@ -111,7 +114,7 @@ const handleDelete = async (eventGuestID) => {
           <Grid container component="main" sx={{ height: "100vh" }}>
             <CssBaseline />
             <Grid
-            style={{minWidth:'100%'}}  
+              style={{ minWidth: "100%" }}
               item
               xs={12}
               sm={8}
@@ -177,18 +180,34 @@ const handleDelete = async (eventGuestID) => {
           </Grid>
         </ThemeProvider>
         <List
-          sx={{ width: "100%", maxWidth: 500, padding:'1rem',border:'2px solid grey', bgcolor: "background.paper" }}
+          sx={{
+            width: "100%",
+            maxWidth: 500,
+            padding: "1rem",
+            border: "2px solid grey",
+            bgcolor: "background.paper",
+          }}
         >
-        <h1 style={{fontSize:'2rem',color:"blueviolet"}}>
-          Guest List
-        </h1>
+          <h1 style={{ fontSize: "2rem", color: "blueviolet" }}>Guest List</h1>
           {guests.map((guest) => (
             <ListItem
               key={guest.eventGuestID}
               disableGutters
               secondaryAction={
-                <IconButton aria-label="comment" onClick={() => handleDelete(guest.eventGuestID)}>
-                  <DeleteOutlineOutlinedIcon />
+                <IconButton
+                  aria-label="comment"
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: "#9a2e2ec4",
+                    boxShadow:
+                      "0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.4)",
+                  }}
+                  onClick={() => handleDelete(guest.eventGuestID)}
+                >
+                  <DeleteOutlineOutlinedIcon  style={{boxShadow:
+                      "0 4px 8px rgba(0, 0, 0, 0.2), 2px 0px 16px rgba(0, 0, 0, 0.4)",
+                      borderRadius: "50%",
+                    backgroundColor: "transparent",}}/>
                 </IconButton>
               }
             >

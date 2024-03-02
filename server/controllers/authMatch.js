@@ -22,6 +22,7 @@ export async function matchTokenFormat(req, res, next) {
     const user = userRows[0];
     req.user = user; 
 
+    console.log("userID: ",user);
     // Optionally, you can perform additional checks on the decoded token here
 
     next();
