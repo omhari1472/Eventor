@@ -14,6 +14,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import usePrivateRoute from './usePrivateRoute';
 
@@ -30,36 +33,83 @@ export default function LogIn({ setIsAuthenticated }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+  
     try {
+      const email = data.get('email');
+      const password = data.get('password');
+  
+      if (!email || !password) {
+        toast.error('Email and password are required');
+        return;
+      }
+  
       const response = await axios.post('http://localhost:4000/auth/login', {
-        email: data.get('email'),
-        password: data.get('password'),
+        email,
+        password,
       });
-
+  
       if (response.status === 200) {
         const { token, user } = response.data;
-
-        // Save the token to localStorage
+  
         localStorage.setItem('authToken', token);
-  
-        // You can also store other user-related information if needed
         localStorage.setItem('user', JSON.stringify(user));
-  
-        console.log("Authent",localStorage.getItem('authToken'));
         setIsAuthenticated(true);
+  
+        toast.success('Login successful!');
+        setTimeout(() => {
 
-        navigate('/home');        
-         // Set isAuthenticated to true upon successful login
+          navigate('/home');
+        }, 1000);
       } else {
-        // Handle login failure, display an error message or take appropriate action
         console.error('Login unsuccessful:', response.data.error);
+  
+        // Check if the error object has a response property
+        if (response.data.error === 'UserNotFound') {
+          toast.error('User not found. Please check your email.');
+        } else if (response.status === 401) {
+          if (response.data.error === 'IncorrectPassword') {
+            toast.error('Incorrect password. Please try again.');
+          } else {
+            toast.error('Invalid credentials. Please check your email and password.');
+          }
+        } else {
+          console.error('Login unsuccessful:', response.data.error);
+          toast.error(`An error occurred. Status Code: ${response.status}`);
+        }
       }
     } catch (error) {
-      // Handle errors
       console.error('Error during login:', error);
+  
+      // Check if the error object has a response property
+      if (error.response) {
+        // Log the entire response object for debugging purposes
+        console.log('Response object:', error.response);
+  
+        // Extract the status code and provide specific messages based on it
+        const statusCode = error.response.status;
+        if (statusCode === 401) {
+          console.error('Login unsuccessful:', error.response.data.error);
+  
+          if (error.response.data.error === 'IncorrectPassword') {
+            toast.error('Incorrect password. Please try again.');
+          } else if (error.response.data.error === 'UserNotFound') {
+            toast.error('User not found. Please check your email.');
+          } else {
+            toast.error('Invalid credentials. Please check your email and password.');
+          }
+        } else {
+          console.error('Login unsuccessful:', error.response.data.error);
+          toast.error(`An error occurred. Status Code: ${statusCode}`);
+        }
+      } else {
+        // Log a general error message if the response property is not present
+        console.log('Unexpected error:', error);
+        toast.error('An unexpected error occurred. Please try again later.');
+      }
     }
   };
+  
+  
 
   const containerStyle = {
     background: 'rgba(255, 255, 255, 0.18)',
@@ -89,6 +139,8 @@ export default function LogIn({ setIsAuthenticated }) {
     display:'flex',
     justifyContent:'center'
     }}>
+        <ToastContainer />
+
     <ThemeProvider theme={defaultTheme}>
 
       <Grid container component="main"  sx={{ height: '100vh' }}>

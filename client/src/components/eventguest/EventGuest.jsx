@@ -20,6 +20,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import IconButton from "@mui/material/IconButton";
+import validator from "validator";
+
 const defaultTheme = createTheme();
 
 export default function EventGuest({ isAuthenticated }) {
@@ -27,15 +29,25 @@ export default function EventGuest({ isAuthenticated }) {
   console.log("Authent", localStorage.getItem("authToken"));
 
   // const navigate = useNavigate();
+  const [guests, setGuests] = useState([]);
+
+  const [formData, setFormData] = useState({
+    guestname: "",
+    guestemail: "",
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+
+    if (!validator.isEmail(formData.guestemail)) {
+      // toast.error("Invalid email address");
+      return;
+    }
 
     try {
       const eventData = {
-        guestName: data.get("guestname"),
-        guestEmail: data.get("guestemail"), // Fix: Use 'guestemail' for email field
+        guestName: formData.guestname,
+        guestEmail: formData.guestemail,
       };
 
       const authToken = localStorage.getItem("authToken");
@@ -67,12 +79,17 @@ export default function EventGuest({ isAuthenticated }) {
     }
   };
 
-  const [guests, setGuests] = useState([]);
-
   useEffect(() => {
     // Make a GET request to fetch venue data using axios
+
+    const authToken = localStorage.getItem("authToken");
+
     axios
-      .get("http://localhost:4000/auth/guest")
+      .get("http://localhost:4000/auth/guest", {
+        headers: {
+          Authorization: `${authToken}`,
+        },
+      })
       .then((response) => {
         // Update the state with the fetched venue data
         setGuests(response.data.guests);
@@ -103,10 +120,38 @@ export default function EventGuest({ isAuthenticated }) {
     }
   };
 
+  const containerStyle = {
+    background: "rgba(255, 255, 255, 0.18)",
+    borderRadius: "16px",
+    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+    backdropFilter: "blur(3.5px)",
+    WebkitBackdropFilter: "blur(3.5px)",
+    border: "1px solid rgba(255, 255, 255, 0.69)",
+    objectFit: "contain",
+    color: "white",
+    margin: "0 auto",
+    height: "83vh",
+    zIndex: "1",
+    minWidth: "70%",
+  };
+
   usePrivateRoute(true);
 
   return (
-    <>
+    <div
+      style={{
+        position: "relative",
+        backgroundImage: `url(./images/3.jpg)`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        maxWidth: "100%",
+        backgroundPosition: "center",
+        overflow: "hidden",
+        minWidth: "100%",
+        background: "trasparent",
+        height: "100vh",
+      }}
+    >
       <ToastContainer />
       <Header />
       <div style={{ display: "flex" }}>
@@ -114,8 +159,8 @@ export default function EventGuest({ isAuthenticated }) {
           <Grid container component="main" sx={{ height: "100vh" }}>
             <CssBaseline />
             <Grid
-              style={{ minWidth: "100%" }}
               item
+              style={containerStyle}
               xs={12}
               sm={8}
               md={5}
@@ -136,7 +181,11 @@ export default function EventGuest({ isAuthenticated }) {
                   <PersonAddAlt1OutlinedIcon />
                 </Avatar>
 
-                <Typography component="h1" variant="h5">
+                <Typography
+                  component="h1"
+                  style={{ color: "black" }}
+                  variant="h5"
+                >
                   Add Guest
                 </Typography>
                 <Box
@@ -154,7 +203,11 @@ export default function EventGuest({ isAuthenticated }) {
                     name="guestname"
                     autoComplete="off"
                     autoFocus
+                    onChange={(e) =>
+                      setFormData({ ...formData, guestname: e.target.value })
+                    }
                   />
+
                   <TextField
                     margin="normal"
                     required
@@ -164,12 +217,31 @@ export default function EventGuest({ isAuthenticated }) {
                     name="guestemail"
                     autoComplete="off"
                     autoFocus
+                    onBlur={() => {
+                      // Validate email onBlur
+                      if (
+                        formData.guestemail &&
+                        !validator.isEmail(formData.guestemail)
+                      ) {
+                        toast.error("Invalid email address");
+                      }
+                    }}
+                    onChange={(e) =>
+                      setFormData({ ...formData, guestemail: e.target.value })
+                    }
                   />
 
+                  {/* Display an error message for invalid email */}
+                  {formData.email && !validator.isEmail(formData.email) && (
+                    <Typography variant="body2" color="error">
+                      Invalid email address
+                    </Typography>
+                  )}
                   <Button
                     type="submit"
                     fullWidth
                     variant="contained"
+                    // onClick={handleSubmit}
                     sx={{ mt: 3, mb: 2 }}
                   >
                     Add Guest
@@ -180,19 +252,31 @@ export default function EventGuest({ isAuthenticated }) {
           </Grid>
         </ThemeProvider>
         <List
-          sx={{
-            width: "100%",
-            maxWidth: 500,
+          style={{
+            background: "rgba(255, 255, 255, 0.18)",
+            borderRadius: "16px",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(3.5px)",
+            WebkitBackdropFilter: "blur(3.5px)",
+            border: "1px solid rgba(255, 255, 255, 0.69)",
+            objectFit: "contain",
+            color: "black",
+            margin: "0 auto",
+            marginRight: "18px",
+            height: "83vh",
+            zIndex: "1",
+            minWidth: "40%",
             padding: "1rem",
-            border: "2px solid grey",
-            bgcolor: "background.paper",
           }}
         >
           <h1 style={{ fontSize: "2rem", color: "blueviolet" }}>Guest List</h1>
-          {guests.map((guest) => (
+          {guests.map((guest, index) => (
             <ListItem
               key={guest.eventGuestID}
               disableGutters
+              style={{
+                background: index % 2 === 0 ? "#f3f3f3" : "transparent", // Alternate row colors
+              }}
               secondaryAction={
                 <IconButton
                   aria-label="comment"
@@ -204,14 +288,17 @@ export default function EventGuest({ isAuthenticated }) {
                   }}
                   onClick={() => handleDelete(guest.eventGuestID)}
                 >
-                  <DeleteOutlineOutlinedIcon  style={{boxShadow:
-                      "0 4px 8px rgba(0, 0, 0, 0.2), 2px 0px 16px rgba(0, 0, 0, 0.4)",
+                  <DeleteOutlineOutlinedIcon
+                    style={{
+                      boxShadow:
+                        "0 4px 8px rgba(0, 0, 0, 0.2), 2px 0px 16px rgba(0, 0, 0, 0.4)",
                       borderRadius: "50%",
-                    backgroundColor: "transparent",}}/>
+                      backgroundColor: "transparent",
+                    }}
+                  />
                 </IconButton>
               }
             >
-               
               <ListItemText
                 primary={guest.guestName}
                 secondary={guest.guestEmail}
@@ -220,6 +307,6 @@ export default function EventGuest({ isAuthenticated }) {
           ))}
         </List>
       </div>
-    </>
+    </div>
   );
 }

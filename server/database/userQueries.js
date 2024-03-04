@@ -16,6 +16,18 @@ export async function registerUser(username, hashedPassword, email) {
     throw error;
   }
 }
+export async function getUserByEmail(email) {
+  try {
+    const [result] = await pool.query(`
+      SELECT * FROM Users WHERE email = ?
+    `, [email]);
+
+    // Resolve with the user if found, or null if not found
+    return result.length > 0 ? result[0] : null;
+  } catch (error) {
+    throw error;
+  }
+}
 
 
 export async function loginUser(email) {
@@ -37,10 +49,18 @@ export async function getVenues() {
   }
 }
 
-export async function getEventGuest() {
+export async function getEventGuest(userID) {
+
+  const query = `
+  SELECT e.*, u.*
+  FROM eventGuests e
+  JOIN users u ON e.userid = u.userid
+  WHERE u.userid = ?
+`;
+
   try {
-    const [rows, fields] = await pool.query('SELECT * FROM EventGuests');
-    return rows;
+    const [result] = await pool.query(query, [userID]); 
+    return result;
   } catch (error) {
     throw error;
   }

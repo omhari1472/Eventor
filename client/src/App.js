@@ -10,7 +10,6 @@ import Venue from './components/venue/Venue';
 import Checkout from './components/payment/Checkout';
 import RSVPInvitation from './components/invitation/RSVPInvitation';
 import EventGuest from './components/eventguest/EventGuest';
-import ResponsiveAppBar from './components/header/Test';
 import Home from './components/dashboard/Dashboard';
 import ContactUs from './components/contactus/ContactUs';
 import Profile from './components/profile/Profile';
@@ -19,12 +18,9 @@ import Profile from './components/profile/Profile';
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const [selectedVendor, setSelectedVendor] = useState(null);
-
 
   return (
     <>
-      {/* <ResponsiveAppBar isAuthenticated={isAuthenticated} /> */}
       <Routes>
          <Route
           path="/"

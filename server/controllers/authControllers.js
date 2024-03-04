@@ -1,4 +1,4 @@
-import { registerUser } from '../database/userQueries.js';
+import { getUserByEmail, registerUser } from '../database/userQueries.js';
 import {pool} from '../database/db.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -7,15 +7,32 @@ export async function registerUserController(req, res) {
   const { username, password, email } = req.body;
 
   try {
+
+    const existingUser = await getUserByEmail(email);
+
+    if (existingUser) {
+      // User with the same email already exists
+      return res.status(400).send({ error: 'Duplicate entry. User with the same email already exists.' });
+    }
+
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const registrationResult = await registerUser(username, hashedPassword, email);
 
     res.status(201).send({ message: 'User registered successfully', user: registrationResult });
   } catch (error) {
     console.error('Error registering user:', error);
-    res.status(500).send({ error: 'Internal Server Error' });
+
+    if (error.code === 'ER_DUP_ENTRY') {
+      // Duplicate entry error (e.g., duplicate email)
+      res.status(400).send({ error: 'Duplicate entry. User with the same email already exists.' });
+    } else {
+      // Other types of errors
+      res.status(500).send({ error: 'Internal Server Error' });
+    }
   }
 }
+
 
 export async function loginUserController(req, res) {
   const { email, password } = req.body;
@@ -25,7 +42,7 @@ export async function loginUserController(req, res) {
     const [userRows] = await pool.query('SELECT * FROM Users WHERE email = ?', [email]);
 
     if (userRows.length === 0) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: 'UserNotFound' });
     }
 
     const user = userRows[0];
@@ -34,7 +51,7 @@ export async function loginUserController(req, res) {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: 'IncorrectPassword' });
     }
 
     // Create and send a JWT token for authentication
@@ -45,11 +62,10 @@ export async function loginUserController(req, res) {
       user: { username: user.username, email: user.email },
       token,
     });
-    // console.log("token",token);
-
 
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+

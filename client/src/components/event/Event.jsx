@@ -15,19 +15,32 @@ import { MenuItem } from "@mui/material";
 import Header from "../header/Header";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function Event({ isAuthenticated }) {
   usePrivateRoute(isAuthenticated);
-  console.log("Authent", localStorage.getItem("authToken"));
+  // console.log("Authent", localStorage.getItem("authToken"));
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+  
+    // Check for empty fields
+    const requiredFields = ["eventname", "eventtype", "eventdate", "eventtime", "venueid"];
+    const emptyFields = requiredFields.filter((field) => !data.get(field));
+  
+    if (emptyFields.length > 0) {
+      // Display specific error messages for empty fields
+      emptyFields.forEach((field) => {
+        toast.error(`${field.charAt(0).toUpperCase() + field.slice(1)} is required.`);
+      });
+      return;
+    }
+  
     try {
       const eventData = {
         eventName: data.get("eventname"),
@@ -36,9 +49,10 @@ export default function Event({ isAuthenticated }) {
         eventTime: data.get("eventtime"),
         venueID: data.get("venueid"),
       };
-
+  
+      
       const authToken = localStorage.getItem("authToken");
-
+  
       const response = await axios.post(
         "http://localhost:4000/auth/event",
         eventData,
@@ -48,16 +62,21 @@ export default function Event({ isAuthenticated }) {
           },
         }
       );
-
+  
       // Handle the response as needed
       toast.success("Event created successfully!");
       console.log("Response from server:", response.data);
+      localStorage.setItem('eventData', eventData);
+      setTimeout(() => {
+        navigate("/checkout"); 
+      }, 2000);
     } catch (error) {
       // Handle errors
       console.error("Error submitting form:", error);
+      toast.error("An error occurred while creating the event.");
     }
   };
-
+  
   const containerStyle = {
     background: 'rgba(255, 255, 255, 0.18)',
     borderRadius: '16px',
@@ -67,8 +86,8 @@ export default function Event({ isAuthenticated }) {
     border: '1px solid rgba(255, 255, 255, 0.69)',
     objectFit:'contain',
     color:'white',
-    margin:'auto',
-    height:'70vh',
+    margin:'0 auto',
+    height:'83vh',
     zIndex:'1',
 
   };
@@ -78,7 +97,7 @@ export default function Event({ isAuthenticated }) {
     <div
     style={{
       position: "relative",
-      backgroundImage: `url(./images/event.jpg)`,
+      backgroundImage: `url(./images/3.jpg)`,
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
       maxWidth: "100%",
@@ -89,15 +108,7 @@ export default function Event({ isAuthenticated }) {
       height: '100vh',
     }}
   >
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adjust the alpha value as needed
-        // opacity: 0.9, // Add opacity
-      }}
-    >
-      <ToastContainer />
+      <ToastContainer style={{margin:'0 auto'}} />
       <Header style={{ zIndex: '1' }} />
       <ThemeProvider theme={defaultTheme}>
         <Grid container component="main" sx={{ height: "100vh" }}>
@@ -124,7 +135,7 @@ export default function Event({ isAuthenticated }) {
               <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
                 <EventAvailableIcon />
               </Avatar>
-              <Typography component="h1" variant="h5">
+              <Typography component="h1" style={{color:'black'}}  variant="h5">
                 Create Your Event
               </Typography>
               <Box
@@ -221,7 +232,6 @@ export default function Event({ isAuthenticated }) {
           </Grid>
         </Grid>
       </ThemeProvider>
-    </div>
     </div>
   );
 }

@@ -28,6 +28,25 @@ export async function createEvent(eventname, eventtype, eventdate, eventtime, ve
       throw error;
     }
 }
+export async function submitContact(userID, name , email, message) {
+    try {
+      // console.log('Fetching user for email:', email);
+
+      // Insert event data with the associated user ID
+      const [result] = await pool.query(`
+        INSERT INTO ContactFormSubmission (userID, name, email, message)
+        VALUES (?, ?, ?, ?)
+      `, [userID, name, email, message]);
+
+
+      // Optionally, you can get the inserted event's ID if needed
+      // const eventId = result.insertId;
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+}
 
 
 // export async function getEventById(eventId) {
@@ -65,24 +84,23 @@ export async function getAllEvents(userID) {
   }
 }
 
-export async function postEventGuest(email, guestName, guestEmail) {
+export async function postEventGuest(userID, guestName, guestEmail) {
     try {
       // console.log('Fetching user for email:', email);
 
       // Fetch the user's ID based on the email
-      const [userRows] = await pool.query('SELECT userID FROM Users WHERE email = ?', [email]);
 
       // console.log('User Rows:', userRows);
 
-      if (userRows.length === 0) {
-        throw new Error('User not found'); // You can handle this case according to your application's logic
-      }
+      // if (userRows.length === 0) {
+      //   throw new Error('User not found'); // You can handle this case according to your application's logic
+      // }
 
       // Insert event data with the associated user ID
       const [result] = await pool.query(`
-        INSERT INTO EventGuests (eventID, guestName, guestEmail)
+        INSERT INTO EventGuests (userID, guestName, guestEmail)
         VALUES (?, ?, ?)
-      `, [ userRows[0].userID , guestName, guestEmail ]);
+      `, [ userID , guestName, guestEmail ]);
 
       // Optionally, you can get the inserted event's ID if needed
       // const eventId = result.insertId;

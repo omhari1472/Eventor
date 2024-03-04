@@ -7,7 +7,6 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import IconButton from "@mui/material/IconButton";
 import CircularProgress from "@mui/material/CircularProgress";
-import ResponsiveAppBar from "../header/Test";
 import Header from "../header/Header";
 
 const RSVPInvitation = ({
@@ -23,8 +22,14 @@ const RSVPInvitation = ({
 
   useEffect(() => {
     // Make a GET request to fetch venue data using axios
+    const authToken = localStorage.getItem("authToken");
+
     axios
-      .get("http://localhost:4000/auth/guest")
+      .get("http://localhost:4000/auth/guest", {
+        headers: {
+          Authorization: `${authToken}`,
+        },
+      })
       .then((response) => {
         // Update the state with the fetched venue data
         const updatedGuests = response.data.guests.map((guest) => ({
@@ -61,12 +66,41 @@ const RSVPInvitation = ({
     }
   };
 
-  return (
-    <>
+  const containerStyle = {
+    background: "rgba(255, 255, 255, 0.18)",
+    borderRadius: "16px",
+    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+    backdropFilter: "blur(3.5px)",
+    WebkitBackdropFilter: "blur(3.5px)",
+    border: "1px solid rgba(255, 255, 255, 0.69)",
+    objectFit: "contain",
+    color: "black",
+    margin: "0 auto",
+    height: "83vh",
+    zIndex: "1",
+    minWidth: "40%",
+  };
 
-    <ResponsiveAppBar/>
+
+  return (
+    <div
+    style={{
+      position: "relative",
+      backgroundImage: `url(./images/3.jpg)`,
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "cover",
+      maxWidth: "100%",
+      backgroundPosition: "center",
+      overflow: "hidden",
+      minWidth: "100%",
+      background: "trasparent",
+      height: "100vh",
+    }}
+  >  
+
     <Header/>
-    <div className="max-w-2xl mx-auto bg-white p-8 rounded shadow-md mt-8">
+
+    <div style={containerStyle} className="max-w-2xl mx-auto bg-white p-8 rounded shadow-md mt-8">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold">RSVP Invitation</h1>
       </div>
@@ -111,6 +145,7 @@ const RSVPInvitation = ({
       </button>
 
       <List
+      style={containerStyle}
         sx={{
           width: "100%",
           maxWidth: 500,
@@ -143,7 +178,7 @@ const RSVPInvitation = ({
         ))}
       </List>
     </div>
-    </>
+    </div>
   );
 };
 

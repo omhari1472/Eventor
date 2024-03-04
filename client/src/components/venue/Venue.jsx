@@ -11,34 +11,52 @@ export default function Venue() {
   const [venues, setVenues] = useState([]);
 
   useEffect(() => {
-    // Make a GET request to fetch venue data using axios
     axios
       .get("http://localhost:4000/auth/venue")
       .then((response) => {
-        // Update the state with the fetched venue data
         setVenues(response.data.venues);
       })
       .catch((error) => {
         console.error("Error fetching venues:", error);
       });
-  }, []); // The empty dependency array ensures that this effect runs only once, similar to componentDidMount
+  }, []);
 
   return (
-    <>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100vh",
+        overflowY: "auto", // Enable scrolling for the content
+      }}
+    >
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage: `url(./images/3.jpg)`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          zIndex: -1,
+        }}
+      />
       <Header />
       <div
         style={{
           display: "flex",
           flexWrap: "wrap",
           maxWidth: "100%",
-          overflow: "hidden",
           justifyContent: "space-between",
           padding: "3rem",
         }}
       >
         {venues.map((venue, i) => (
           <Card
-            style={{ margin: "1rem", width: "300px" }} // Set a fixed width for the cards
+            style={{ margin: "1rem", width: "300px" }}
             key={venue.venueID}
             sx={{ maxWidth: 345 }}
           >
@@ -46,10 +64,10 @@ export default function Venue() {
               <CardMedia
                 component="img"
                 height="140"
-                width="100%" // Set to 100% to ensure the image covers the entire area
-                image={`./venueimg/${i + 1}.jpg`} // Replace with the actual image URL from your venue
+                width="100%"
+                image={`./venueimg/${i + 1}.jpg`}
                 alt={venue.venueName}
-                style={{ objectFit: "cover" }} // Ensure the image covers the entire area
+                style={{ objectFit: "cover" }}
               />
               <CardContent>
                 <Typography variant="h6" component="div">
@@ -71,6 +89,6 @@ export default function Venue() {
           </Card>
         ))}
       </div>
-    </>
+    </div>
   );
 }

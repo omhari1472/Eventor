@@ -1,4 +1,4 @@
-import { createEvent, getAllEvents, postEventGuest } from '../database/eventQueries.js';
+import { createEvent, getAllEvents, postEventGuest, submitContact } from '../database/eventQueries.js';
 import { deleteEventGuest, getEventGuest, getVenues } from '../database/userQueries.js';// Replace with your actual venue module
 
 export async function getVenuesController(req, res) {
@@ -28,6 +28,23 @@ export async function createEventController(req, res) {
       
       // Adjust the response based on your application's needs
       res.status(201).send({ message: 'Event Created successfully', eventId: result.insertId  });
+    } catch (error) {
+      console.error('Error creating event:', error);
+      // Adjust the response based on your error handling strategy
+      res.status(500).send({ error: 'Internal Server Error' });
+    }
+}
+
+export async function contactDetailController(req, res) {
+    const { name, email, message } = req.body;
+    const userID = req.user.id; 
+    // console.log("Creating user Id",req.user.userID);
+
+    try {
+      const result = await submitContact( userID, name , email, message); // Pass user email
+      
+      // Adjust the response based on your application's needs
+      res.status(201).send({ message: 'Contact detail submitted successfully', submissionId: result.insertId  });
     } catch (error) {
       console.error('Error creating event:', error);
       // Adjust the response based on your error handling strategy
@@ -78,10 +95,10 @@ export async function getEventController(req, res) {
 
 export async function postEventGuestController(req, res) {
   const { guestName, guestEmail } = req.body;
-  const userID = req.user.id; 
+  const userID = req.user.userID; 
 
   try {
-    const result = await postEventGuest(req.user.email, guestName, guestEmail); // Pass user email
+    const result = await postEventGuest(userID, guestName, guestEmail); // Pass user email
 
     // Assuming postEventGuest returns the newly created guest
     const newGuest = {
@@ -120,7 +137,9 @@ export async function postEventGuestController(req, res) {
 export async function getEventGuestController(req, res) {
   try {
     // Call the getVenues function to fetch venue data
-    const guests = await getEventGuest();
+    const userID = req.user.userID; 
+
+    const guests = await getEventGuest(userID);
 
     // Adjust the response based on your application's needs
     res.status(200).send({ guests });
