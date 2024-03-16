@@ -1,12 +1,12 @@
 import {pool} from './db.js';
 // import bcrypt from 'bcrypt';
 
-export async function registerUser(username, hashedPassword, email) {
+export async function registerUser(username, hashedPassword, email, role) {
   try {
-    const [result] = await pool.query(`
-      INSERT INTO Users (username, password, email)
-      VALUES (?, ?, ?)
-    `, [username, hashedPassword, email]);
+    const [result] = await pool.query(
+      'INSERT INTO Users (username, email, password, role) VALUES (?, ?, ?, ?)',
+      [username, email, hashedPassword, 'user']
+    );
 
     // Optionally, you can get the inserted user's ID if needed
     // const userId = result.insertId;
@@ -16,6 +16,7 @@ export async function registerUser(username, hashedPassword, email) {
     throw error;
   }
 }
+
 export async function getUserByEmail(email) {
   try {
     const [result] = await pool.query(`

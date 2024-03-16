@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export async function registerUserController(req, res) {
-  const { username, password, email } = req.body;
+  const { username, email, password, role } = req.body;
 
   try {
 
@@ -17,7 +17,7 @@ export async function registerUserController(req, res) {
 
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const registrationResult = await registerUser(username, hashedPassword, email);
+    const registrationResult = await registerUser(username, hashedPassword, email, role);
 
     res.status(201).send({ message: 'User registered successfully', user: registrationResult });
   } catch (error) {
@@ -49,18 +49,26 @@ export async function loginUserController(req, res) {
 
     // Compare the entered password with the hashed password stored in the database
     const passwordMatch = await bcrypt.compare(password, user.password);
-
+    
     if (!passwordMatch) {
       return res.status(401).json({ error: 'IncorrectPassword' });
     }
 
+    // Check if the user is an admin
+    const isAdmin = user.role === 'admin';
+
     // Create and send a JWT token for authentication
-    const token = jwt.sign({ userId: user.id, email: user.email }, "eventor", { expiresIn: '1h' });
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, role: user.role },
+      'eventor',
+      { expiresIn: '1h' }
+    );
 
     res.status(200).json({
       message: 'Login successful',
-      user: { username: user.username, email: user.email },
+      user: { username: user.username, email: user.email, role: user.role },
       token,
+      isAdmin,
     });
 
   } catch (error) {

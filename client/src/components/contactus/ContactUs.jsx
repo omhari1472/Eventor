@@ -13,10 +13,13 @@ import axios from "axios";
 import Header from "../header/Header";
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';import { toast, ToastContainer } from "react-toastify";
 import validator from "validator";
+import usePrivateRoute from "../login/usePrivateRoute";
 
 const defaultTheme = createTheme();
 
-export default function ContactUs() {
+export default function ContactUs({isAuthenticated}) {
+  usePrivateRoute(isAuthenticated);
+
   const [formData, setFormData] = useState({
     userId: 1,
     name: "",
@@ -85,6 +88,9 @@ export default function ContactUs() {
     height: "83vh",
     zIndex: "1",
   };
+
+  usePrivateRoute(true);
+
 
   return (
     <div

@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import usePrivateRoute from "../login/usePrivateRoute";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -202,9 +202,11 @@ export default function SignUp({ setIsAuthenticated }) {
                   </Link>
                 </Grid> */}
                   <Grid item>
-                    <Link href="#" variant="body2">
-                      {"Already have an account? Log In"}
-                    </Link>
+                  <Link component={RouterLink} to="/login" variant="body2">
+                  {"Already have an account? Log In"}
+</Link>
+
+                   
                   </Grid>
                 </Grid>
               </Box>

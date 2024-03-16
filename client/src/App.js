@@ -4,7 +4,7 @@ import './App.css';
 import SignUp from './components/signup/SignUp';
 import Welcome from './components/dashboard/Welcome.jsx';
 import LogIn from './components/login/LogIn';
-import Dashboard from './components/dashboard/Dashboard';
+// import Dashboard from './components/dashboard/Dashboard';
 import Event from './components/event/Event';
 import Venue from './components/venue/Venue';
 import Checkout from './components/payment/Checkout';
@@ -13,6 +13,7 @@ import EventGuest from './components/eventguest/EventGuest';
 import Home from './components/dashboard/Dashboard';
 import ContactUs from './components/contactus/ContactUs';
 import Profile from './components/profile/Profile';
+import Dashboard from './components/admin/Dashboard';
 // import WelcomePage from './components/welcome/Welcome';
 
 const App = () => {
@@ -24,11 +25,15 @@ const App = () => {
       <Routes>
          <Route
           path="/"
-          element={<Event/>}
+          element={<LogIn/>}
+        />
+         <Route
+          path="/admin"
+          element={<Dashboard/>}
         />
          <Route
           path="/venue"
-          element={<Venue/>}
+          element={<Venue isAuthenticated={isAuthenticated} />}
         />
          <Route
           path="/welcome"
@@ -40,15 +45,15 @@ const App = () => {
         />
          <Route
           path="/rsvp"
-          element={<RSVPInvitation />}
+          element={<RSVPInvitation isAuthenticated={isAuthenticated} />}
         />
          <Route
           path="/checkout"
-          element={<Checkout/>}
+          element={<Checkout isAuthenticated={isAuthenticated} />}
         />
          <Route
           path="/contactus"
-          element={<ContactUs/>}
+          element={<ContactUs isAuthenticated={isAuthenticated} />}
         />
          <Route
           path="/invitation"

@@ -35,7 +35,15 @@ const Profile = () => {
     fetchEventDetails();
   }, []);
 
-  const user = {
+  const userString = localStorage.getItem('user');
+
+  // Parse the JSON string to get the user object
+  const user = userString ? JSON.parse(userString) : null;
+  
+  // Get the username from the user object
+  const username = user ? user.username : null;
+
+  const user1 = {
     profileImg: "./images/profile.jpg",
     name: "Hari Om",
     dob: "17/12/2003",
@@ -74,16 +82,16 @@ const Profile = () => {
 >
   <Avatar
     alt="Profile Image"
-    src={user.profileImg}
+    src={user1.profileImg}
     style={{ width: "150px", height: "150px", marginBottom: "20px" }}
   />
-  <h2 style={{ margin: "0", marginBottom: "10px" }}>{user.name}</h2>
-  <p style={{ margin: "0", marginBottom: "5px" }}>Date of Birth: {user.dob}</p>
+  <h2 style={{ margin: "0", marginBottom: "10px" }}>{username}</h2>
+  <p style={{ margin: "0", marginBottom: "5px" }}>Date of Birth: {user1.dob}</p>
   <p style={{ margin: "0", marginBottom: "5px" }}>Email: {user.email}</p>
-  <p style={{ margin: "0", marginBottom: "5px" }}>Age: {user.age}</p>
-  <p style={{ margin: "0", marginBottom: "5px" }}>Gender: {user.gender}</p>
-  <p style={{ margin: "0", marginBottom: "5px" }}>Address: {user.address}</p>
-  <p style={{ margin: "0" }}>Mobile No: {user.mobileNo}</p>
+  <p style={{ margin: "0", marginBottom: "5px" }}>Age: {user1.age}</p>
+  <p style={{ margin: "0", marginBottom: "5px" }}>Gender: {user1.gender}</p>
+  <p style={{ margin: "0", marginBottom: "5px" }}>Address: {user1.address}</p>
+  <p style={{ margin: "0" }}>Mobile No: {user1.mobileNo}</p>
 </div>
 
 
@@ -126,22 +134,22 @@ const Profile = () => {
                       secondaryAction={
                         <IconButton
                           aria-label="comment"
-                          style={{
-                            borderRadius: "50%",
-                            backgroundColor: "#9a2e2ec4",
-                            marginRight: "15px",
-                            boxShadow:
-                              "0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.4)",
-                          }}
+                          // style={{
+                          //   borderRadius: "50%",
+                          //   backgroundColor: "#9a2e2ec4",
+                          //   marginRight: "15px",
+                          //   boxShadow:
+                          //     "0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.4)",
+                          // }}
                         >
-                          <DeleteOutlineOutlinedIcon
+                          {/* <DeleteOutlineOutlinedIcon
                             style={{
                               boxShadow:
                                 "0 4px 8px rgba(0, 0, 0, 0.2), 2px 0px 16px rgba(0, 0, 0, 0.4)",
                               borderRadius: "50%",
                               backgroundColor: "transparent",
                             }}
-                          />
+                          /> */}
                         </IconButton>
                       }
                       style={{

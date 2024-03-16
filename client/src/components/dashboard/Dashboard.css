@@ -289,9 +289,9 @@
   /*-----------------------------------*\
     #HEADER
   \*-----------------------------------*/
-  
+/*   
   .header {
-    background: var(--viridian-green);
+    background: transparent;
     padding-block: 20px;
     height: 88px;
     overflow: hidden;
@@ -356,7 +356,7 @@
   
   
   
-  
+   */
   
   /*-----------------------------------*\
     #HERO

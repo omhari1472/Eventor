@@ -1,0 +1,24 @@
+.react-datepicker-wrapper{
+    width: 100%;
+    border: 1px solid grey;
+}
+.react-datepicker__day {
+   color: green;
+}
+.react-datepicker__day--disabled {
+    color: red !important; /* Change the color of disabled days to red */
+  }
+  
+  .react-datepicker__day--disabled:hover::before {
+    content: "Not available"; /* Display the message on hover */
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    top: -30px; /* Adjust the positioning of the message */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+  }
+  

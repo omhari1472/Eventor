@@ -381,6 +381,7 @@ body {
   font-weight: var(--fw-500);
   padding-block: 10px 0;
   border-bottom: 3px solid transparent;
+  border-radius: 10px;
   width: max-content;
 }
 

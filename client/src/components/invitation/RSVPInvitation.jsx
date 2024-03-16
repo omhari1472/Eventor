@@ -109,8 +109,8 @@ const RSVPInvitation = ({
         <p>Dear {guestName},</p>
         <p>You are invited to our special event:</p>
         <ul className="list-disc ml-8">
-          <li>
-            <strong>Event Name:</strong> {eventName}
+          <li >
+            <strong>Event Name:</strong>{eventName}
           </li>
           <li>
             <strong>Date:</strong> {eventDate}
@@ -145,12 +145,11 @@ const RSVPInvitation = ({
       </button>
 
       <List
-      style={containerStyle}
+      style={{background:'transparent'}}
         sx={{
           width: "100%",
           maxWidth: 500,
           padding: "1rem",
-          border: "2px solid grey",
           bgcolor: "background.paper",
         }}
       >

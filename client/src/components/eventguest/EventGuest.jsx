@@ -270,41 +270,47 @@ export default function EventGuest({ isAuthenticated }) {
           }}
         >
           <h1 style={{ fontSize: "2rem", color: "blueviolet" }}>Guest List</h1>
-          {guests.map((guest, index) => (
-            <ListItem
-              key={guest.eventGuestID}
-              disableGutters
-              style={{
-                background: index % 2 === 0 ? "#f3f3f3" : "transparent", // Alternate row colors
-              }}
-              secondaryAction={
-                <IconButton
-                  aria-label="comment"
-                  style={{
-                    borderRadius: "50%",
-                    backgroundColor: "#9a2e2ec4",
-                    boxShadow:
-                      "0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.4)",
-                  }}
-                  onClick={() => handleDelete(guest.eventGuestID)}
-                >
-                  <DeleteOutlineOutlinedIcon
+          {guests.length > 0 ? (
+            guests.map((guest, index) => (
+              <ListItem
+                key={guest.eventGuestID}
+                disableGutters
+                style={{
+                  background: index % 2 === 0 ? "#f3f3f3" : "transparent",
+                }}
+                secondaryAction={
+                  <IconButton
+                    aria-label="comment"
                     style={{
-                      boxShadow:
-                        "0 4px 8px rgba(0, 0, 0, 0.2), 2px 0px 16px rgba(0, 0, 0, 0.4)",
                       borderRadius: "50%",
-                      backgroundColor: "transparent",
+                      backgroundColor: "#9a2e2ec4",
+                      boxShadow:
+                        "0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.4)",
                     }}
-                  />
-                </IconButton>
-              }
-            >
-              <ListItemText
-                primary={guest.guestName}
-                secondary={guest.guestEmail}
-              />
-            </ListItem>
-          ))}
+                    onClick={() => handleDelete(guest.eventGuestID)}
+                  >
+                    <DeleteOutlineOutlinedIcon
+                      style={{
+                        boxShadow:
+                          "0 4px 8px rgba(0, 0, 0, 0.2), 2px 0px 16px rgba(0, 0, 0, 0.4)",
+                        borderRadius: "50%",
+                        backgroundColor: "transparent",
+                      }}
+                    />
+                  </IconButton>
+                }
+              >
+                <ListItemText
+                  primary={guest.guestName}
+                  secondary={guest.guestEmail}
+                />
+              </ListItem>
+            ))
+          ) : (
+            <Typography variant="h5" style={{ marginTop: "1rem" }}>
+              No guests added yet.
+            </Typography>
+          )}
         </List>
       </div>
     </div>

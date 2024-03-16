@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,6 +16,10 @@ import Header from "../header/Header";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { addDays } from "date-fns";
+import  './Event.css'
 
 const defaultTheme = createTheme();
 
@@ -23,36 +27,107 @@ export default function Event({ isAuthenticated }) {
   usePrivateRoute(isAuthenticated);
   // console.log("Authent", localStorage.getItem("authToken"));
 
+  const [venues, setVenues] = useState([]);
+  const [selectedVenue, setSelectedVenue] = useState("");
+  const [excludedDates, setExcludedDates] = useState([]);
+  const [startDate, setStartDate] = useState(null); // State for the selected date
+
+  useEffect(() => {
+    // Fetch venues from the backend
+    axios
+      .get("http://localhost:4000/auth/venue")
+      .then((response) => {
+        setVenues(response.data.venues);
+        // console.log("ha",response.data); // Assuming the response contains an array of venue objects
+      })
+      .catch((error) => {
+        console.error("Error fetching venues:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (selectedVenue) {
+      axios
+        .get(`http://localhost:4000/auth/venue/${selectedVenue}/availability`)
+        .then((response) => {
+          const formattedDates = response.data.availability.map(
+            (item) => new Date(item.date)
+          );
+          setExcludedDates(formattedDates);
+        })
+        .catch((error) => {
+          console.error("Error fetching venue availability:", error);
+        });
+    }
+  }, [selectedVenue]);
+
+  const handleVenueChange = (event) => {
+    setSelectedVenue(event.target.value);
+  };
+
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-  
+
     // Check for empty fields
-    const requiredFields = ["eventname", "eventtype", "eventdate", "eventtime", "venueid"];
+    const requiredFields = [
+      "eventname",
+      "eventtype",
+      "eventdate",
+      "eventtime",
+      "venueid",
+    ];
     const emptyFields = requiredFields.filter((field) => !data.get(field));
-  
+
     if (emptyFields.length > 0) {
       // Display specific error messages for empty fields
       emptyFields.forEach((field) => {
-        toast.error(`${field.charAt(0).toUpperCase() + field.slice(1)} is required.`);
+        toast.error(
+          `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`
+        );
       });
       return;
     }
-  
+
+
     try {
+      const formattedDate = startDate.toISOString().split("T")[0];
+    
+      const availabilitydata = {
+        date: formattedDate,
+        venue_id: data.get("venueid"),
+        available: false, // Use colon instead of =
+      };
+    
+      const response = await axios.post(
+        "http://localhost:4000/auth/availability",
+        availabilitydata
+      );
+    
+      // Handle the response if needed
+    } catch (error) {
+      // Handle errors
+      console.error("Error submitting form:", error);
+      toast.error("An error occurred while creating the event.");
+    }
+    
+  
+
+    try {
+      const formattedDate = startDate.toISOString().split("T")[0];
+
       const eventData = {
         eventName: data.get("eventname"),
         eventType: data.get("eventtype"),
-        eventDate: data.get("eventdate"),
+        eventDate: formattedDate,
         eventTime: data.get("eventtime"),
         venueID: data.get("venueid"),
       };
-  
-      
+
       const authToken = localStorage.getItem("authToken");
-  
+
       const response = await axios.post(
         "http://localhost:4000/auth/event",
         eventData,
@@ -62,54 +137,54 @@ export default function Event({ isAuthenticated }) {
           },
         }
       );
-  
+
       // Handle the response as needed
       toast.success("Event created successfully!");
       console.log("Response from server:", response.data);
-      localStorage.setItem('eventData', eventData);
+      localStorage.setItem("eventData", eventData);
       setTimeout(() => {
-        navigate("/checkout"); 
-      }, 2000);
+        navigate("/checkout");
+      }, 1000);
     } catch (error) {
       // Handle errors
       console.error("Error submitting form:", error);
       toast.error("An error occurred while creating the event.");
     }
-  };
-  
-  const containerStyle = {
-    background: 'rgba(255, 255, 255, 0.18)',
-    borderRadius: '16px',
-    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-    backdropFilter: 'blur(3.5px)',
-    WebkitBackdropFilter: 'blur(3.5px)',
-    border: '1px solid rgba(255, 255, 255, 0.69)',
-    objectFit:'contain',
-    color:'white',
-    margin:'0 auto',
-    height:'83vh',
-    zIndex:'1',
 
+  }
+
+  const containerStyle = {
+    background: "rgba(255, 255, 255, 0.18)",
+    borderRadius: "16px",
+    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+    backdropFilter: "blur(3.5px)",
+    WebkitBackdropFilter: "blur(3.5px)",
+    border: "1px solid rgba(255, 255, 255, 0.69)",
+    objectFit: "contain",
+    color: "white",
+    margin: "0 auto",
+    height: "83vh",
+    zIndex: "1",
   };
   usePrivateRoute(true);
 
   return (
     <div
-    style={{
-      position: "relative",
-      backgroundImage: `url(./images/3.jpg)`,
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-      maxWidth: "100%",
-      backgroundPosition: "center",
-      overflow: 'hidden',
-      minWidth:'100%',
-      background:'trasparent',
-      height: '100vh',
-    }}
-  >
-      <ToastContainer style={{margin:'0 auto'}} />
-      <Header style={{ zIndex: '1' }} />
+      style={{
+        position: "relative",
+        backgroundImage: `url(./images/3.jpg)`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        maxWidth: "100%",
+        backgroundPosition: "center",
+        overflow: "hidden",
+        minWidth: "100%",
+        background: "trasparent",
+        height: "100vh",
+      }}
+    >
+      <ToastContainer style={{ margin: "0 auto" }} />
+      <Header style={{ zIndex: "1" }} />
       <ThemeProvider theme={defaultTheme}>
         <Grid container component="main" sx={{ height: "100vh" }}>
           <CssBaseline />
@@ -135,7 +210,11 @@ export default function Event({ isAuthenticated }) {
               <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
                 <EventAvailableIcon />
               </Avatar>
-              <Typography component="h1" style={{color:'black'}}  variant="h5">
+              <Typography
+                component="h1"
+                style={{ color: "black" }}
+                variant="h5"
+              >
                 Create Your Event
               </Typography>
               <Box
@@ -177,16 +256,39 @@ export default function Event({ isAuthenticated }) {
                 </TextField>
 
                 <TextField
+                  select
                   margin="normal"
                   required
                   fullWidth
-                  id="eventdate"
-                  label="Event Date"
-                  name="eventdate"
-                  type="date"
+                  id="venueid"
+                  label="Venue"
+                  name="venueid"
                   autoComplete="off"
+                  value={selectedVenue}
+                  onChange={handleVenueChange}
                   autoFocus
+                >
+                  {venues.map((venue) => (
+                    <MenuItem key={venue.venueID} value={venue.venueID}>
+                      {venue.venueName}
+                    </MenuItem>
+                  ))}
+                </TextField>
+
+                <DatePicker
+                  selected={startDate}
+                  id="eventdate"
+                  label="eventdate"
+                  width="100%"
+                  name="eventdate"
+                  minDate={new Date()}
+                  maxDate={addDays(new Date(), 90)} // Set max date to 90 days from today
+                  excludeDates={excludedDates} // Use excludedDates directly
+                  onChange={(date) => setStartDate(date)} // Update selected date
+
+                  // className="custom-datepicker" // Add a custom class name
                 />
+
                 <TextField
                   margin="normal"
                   required
@@ -198,26 +300,6 @@ export default function Event({ isAuthenticated }) {
                   autoComplete="off"
                   autoFocus
                 />
-
-                <TextField
-                  select
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="venueid"
-                  label="Venue"
-                  name="venueid"
-                  autoComplete="off"
-                  autoFocus
-                >
-                  <MenuItem value="1">Wedding</MenuItem>
-                  <MenuItem value="2">Birthday Paries</MenuItem>
-                  <MenuItem value="3">Annivesaries</MenuItem>
-                  <MenuItem value="4">Graduation parties</MenuItem>
-                  <MenuItem value="5">Exhibtions</MenuItem>
-                  <MenuItem value="6">Conferences</MenuItem>
-                  <MenuItem value="7">Seminars</MenuItem>
-                </TextField>
 
                 <Button
                   type="submit"

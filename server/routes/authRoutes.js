@@ -5,12 +5,17 @@ import { contactDetailController, createEventController, deleteEventGuestControl
 import { authenticateUser } from '../controllers/authMiddleware.js';
 import { matchTokenFormat } from '../controllers/authMatch.js';
 import { sendInvitationsController } from '../controllers/rsvpController.js';
+import { addVenueAvailabilityController, addVenuesController, deleteVenueController, getVenueAvailabilityController } from '../controllers/adminController.js';
 const router = express.Router();
 
 // Handle user registration
 router.post('/register', registerUserController);
+router.post('/availability', addVenueAvailabilityController);
+router.get('/venue/:venueId/availability',getVenueAvailabilityController);
 router.post('/login', loginUserController);
 router.get('/venue', getVenuesController);
+router.post('/venue', addVenuesController);
+router.delete('/venue/:venueID', deleteVenueController);
 router.post('/event', authenticateUser, createEventController); 
 router.post('/contact', authenticateUser, contactDetailController); 
 router.get('/event',  authenticateUser, getEventController); 
