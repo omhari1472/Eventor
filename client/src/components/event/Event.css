@@ -1,6 +1,12 @@
 .react-datepicker-wrapper{
     width: 100%;
-    border: 1px solid grey;
+    border: 1px solid #b59da9f0;
+    border-radius: 4px;
+    color: black;
+    padding: 11px 10px;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    content: Event date;
 }
 .react-datepicker__day {
    color: green;
@@ -22,3 +28,7 @@
     z-index: 1000;
   }
   
+  .react-datepicker__day--selected{
+    color: white !important;
+  }
+ 

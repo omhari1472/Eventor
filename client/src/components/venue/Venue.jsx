@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { addDays } from "date-fns";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   CardActionArea,
@@ -19,6 +20,7 @@ import usePrivateRoute from "../login/usePrivateRoute"; // Adjust the path as ne
 
 export default function Venue({ isAuthenticated }) {
   usePrivateRoute(isAuthenticated);
+  const navigate = useNavigate();
 
   const [venues, setVenues] = useState([]);
   const [selectedVenue, setSelectedVenue] = useState(null);
@@ -191,12 +193,15 @@ export default function Venue({ isAuthenticated }) {
               >
                 Price: {selectedVenue.price}
               </Typography>
+              <div>
+                
+              </div>
               <Typography
                 variant="body1"
                 id="venue-modal-description"
                 paragraph
               >
-                Availability Calendar:
+                Availability Calendar
               </Typography>
               {/* Date picker */}
               <DatePicker
@@ -210,7 +215,7 @@ export default function Venue({ isAuthenticated }) {
                 excludeDates={excludedDates} // Use excludedDates directly
                 onChange={(date) => setStartDate(date)}
                 inline
-                readOnly 
+                readOnly
               />
               {/* Close button */}
               <Button
@@ -230,13 +235,13 @@ export default function Venue({ isAuthenticated }) {
                   right: "0.5rem",
                 }}
                 onClick={() => {
-                  // Handle booking functionality here
-                  // For example, you can navigate to a booking page
-                  console.log("Book Now clicked");
+                  // Navigate to the event booking page
+                  navigate("/event"); // Adjust the path as needed
                 }}
               >
                 Book Now
               </Button>
+              ;
             </>
           )}
         </div>

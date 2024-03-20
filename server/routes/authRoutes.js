@@ -1,7 +1,7 @@
 import express from 'express';
 import { registerUserController } from '../controllers/authControllers.js';
 import { loginUserController } from '../controllers/authControllers.js';
-import { contactDetailController, createEventController, deleteEventGuestController, getEventController, getEventGuestController, getVenuesController, postEventGuestController } from '../controllers/eventControllers.js';
+import { contactDetailController, createEventController, deleteEventGuestController, getEventController, getEventGuestController, getVenuesController, insertBillingAddressController, insertPaymentMethodController, postEventGuestController } from '../controllers/eventControllers.js';
 import { authenticateUser } from '../controllers/authMiddleware.js';
 import { matchTokenFormat } from '../controllers/authMatch.js';
 import { sendInvitationsController } from '../controllers/rsvpController.js';
@@ -17,6 +17,8 @@ router.get('/venue', getVenuesController);
 router.post('/venue', addVenuesController);
 router.delete('/venue/:venueID', deleteVenueController);
 router.post('/event', authenticateUser, createEventController); 
+router.post('/billing', authenticateUser, insertBillingAddressController); 
+router.post('/payment', authenticateUser, insertPaymentMethodController); 
 router.post('/contact', authenticateUser, contactDetailController); 
 router.get('/event',  authenticateUser, getEventController); 
 router.get('/guest', authenticateUser, getEventGuestController);

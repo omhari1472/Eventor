@@ -122,3 +122,44 @@ export async function deleteEventGuest(eventGuestID) {
     throw error;
   }
 }
+
+
+export async function insertPaymentMethod(nameOnCard, cardNumber, expiryDate, cvv, userID) {
+  try {
+    const query = `
+      INSERT INTO PaymentMethods (nameOnCard, cardNumber, expiryDate, cvv, userID)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    const values = [nameOnCard, cardNumber, expiryDate, cvv, userID];
+
+    const [result] = await pool.query(query, values);
+    
+    // Assuming you want to return the ID of the inserted payment method
+    return result.insertId;
+  } catch (error) {
+    // Handle errors appropriately
+    console.error('Error inserting payment method:', error);
+    throw error; // Re-throw the error for handling it in the controller
+  }
+}
+
+
+export async function insertBillingAddress(firstName, lastName, addressLine1, addressLine2, city, state, zip, country, userID) {
+  try {
+    const query = `
+      INSERT INTO BillingAddresses (firstName, lastName, addressLine1, addressLine2, city, state, zip, country, userID)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const values = [firstName, lastName, addressLine1, addressLine2, city, state, zip, country, userID];
+
+    const [result] = await pool.query(query, values);
+    
+    // Assuming you want to return the ID of the inserted billing address
+    return result.insertId;
+  } catch (error) {
+    // Handle errors appropriately
+    console.error('Error inserting billing address:', error);
+    throw error; // Re-throw the error for handling it in the controller
+  }
+}
+

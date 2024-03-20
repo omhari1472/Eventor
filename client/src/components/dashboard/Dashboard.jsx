@@ -20,6 +20,7 @@ const Home = ({ isAuthenticated }) => {
             backgroundSize: "cover",
             zIndex: "0",
             maxWidth: "100%",
+            overflow:'hidden',
             backgroundPosition: "center",
           }}
         >

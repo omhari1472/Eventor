@@ -1,13 +1,14 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
-function MyComponent() {
+function Invoice() {
   return (
-    <div id="invoice-container" className="flex flex-col justify-center bg-slate-50 max-w-[595px] h-auto">
-      <div className="flex overflow-hidden relative flex-col py-8 w-full min-h-[20px] max-md:max-w-full">
-        
+    <div className="flex flex-col justify-center bg-slate-50 max-w-[595px]">
+      <div className="flex overflow-hidden relative flex-col py-8 w-full min-h-[842px] max-md:max-w-full">
+        <img
+          loading="lazy"
+          srcSet="..."
+          className="object-cover absolute inset-0 size-full"
+        />
         <div className="flex relative flex-col px-10 w-full max-md:px-5 max-md:max-w-full">
           <div className="flex gap-5 justify-between uppercase whitespace-nowrap max-md:flex-wrap max-md:max-w-full">
             <div className="flex flex-col">
@@ -27,9 +28,9 @@ function MyComponent() {
           <div className="flex gap-5 items-start mt-12 text-xs font-semibold leading-4 text-gray-500 max-md:flex-wrap max-md:mt-10">
             <div className="flex flex-col flex-1 self-stretch text-zinc-900">
               <div>Issued</div>
-              <div className="mt-1.5 text-gray-500">{new Date().toLocaleString()}</div>
+              <div className="mt-1.5 text-gray-500">01 Aug, 2023</div>
               <div className="mt-4">Due</div>
-              <div className="mt-1.5 text-gray-500">{new Date().toLocaleString()}</div>
+              <div className="mt-1.5 text-gray-500">15 Aug, 2023</div>
             </div>
             <div className="flex flex-col flex-1">
               <div className="text-zinc-900">Billed to</div>
@@ -43,12 +44,13 @@ function MyComponent() {
             </div>
             <div className="flex flex-col flex-1">
               <div className="text-zinc-900">From</div>
-              <div className="mt-1.5" style={{color:'rebeccapurple', fontSize:'1.3rem', marginBottom:'5px'}}>Eventor</div>
+              <div className="mt-1.5">Panda, Inc</div>
               <div className="leading-4">
-                Boys Hostel Nie North
+                Business address
                 <br />
-                Mysuru, Karnataka, India, 570018
+                City, State, IN - 000 000
               </div>
+              <div>TAX ID 00XXXXX1234X0XX</div>
             </div>
           </div>
           <div className="mt-14 max-md:mt-10 max-md:max-w-full">
@@ -132,7 +134,7 @@ function MyComponent() {
         </div>
         <div className="flex relative flex-col items-start px-10 mt-52 w-full text-xs leading-4 text-gray-500 max-md:px-5 max-md:mt-10 max-md:max-w-full">
           <div className="font-semibold text-zinc-900">
-            Thank you for the booking!
+            Thank you for the business!
           </div>
           <div className="flex gap-1.5 mt-1">
             <img
@@ -146,10 +148,10 @@ function MyComponent() {
           </div>
           <div className="flex gap-5 self-stretch mt-11 font-medium max-md:flex-wrap max-md:mt-10">
             <div className="flex flex-auto gap-4">
-              <div className="flex-auto">EVENTOR, IN</div>
-              <div>+91 70917 58222</div>
+              <div className="flex-auto">Digital Product Designer, IN</div>
+              <div>+91 00000 00000</div>
             </div>
-            <div>omhari1472@gmail.com</div>
+            <div>hello@email.com</div>
           </div>
         </div>
       </div>
@@ -157,28 +159,4 @@ function MyComponent() {
   );
 }
 
-function Review() {
-  const handleDownloadBill = () => {
-    const input = document.getElementById('invoice-container');
-
-    html2canvas(input, { scrollX: 0, scrollY: -window.scrollY }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF();
-      const width = pdf.internal.pageSize.getWidth();
-      const height = pdf.internal.pageSize.getHeight();
-      pdf.addImage(imgData, 'PNG', 0, 0, width, height);
-      pdf.save('bill.pdf');
-    });
-  };
-
-  return (
-    <div>
-      <MyComponent />
-      <Button variant="contained" color="primary" onClick={handleDownloadBill} style={{ marginTop: '20px' }}>
-        Download Invoice
-      </Button>
-    </div>
-  );
-}
-
-export default Review;
+export default Invoice;

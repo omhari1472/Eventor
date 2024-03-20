@@ -1,4 +1,4 @@
-import { createEvent, getAllEvents, postEventGuest, submitContact } from '../database/eventQueries.js';
+import { createEvent, getAllEvents, insertBillingAddress, insertPaymentMethod, postEventGuest, submitContact } from '../database/eventQueries.js';
 import { deleteEventGuest, getEventGuest, getVenues } from '../database/userQueries.js';// Replace with your actual venue module
 
 export async function getVenuesController(req, res) {
@@ -185,5 +185,45 @@ export async function deleteEventGuestController(req, res) {
   } catch (error) {
     console.error('Error deleting guest:', error);
     res.status(500).send({ error: 'Internal Server Error' });
+  }
+}
+
+
+// Import any required modules and functions
+
+// Controller function for inserting billing address
+export async function insertBillingAddressController(req, res) {
+  const userID = req.user.userID; 
+  console.log("userid",userID);
+  const { firstName, lastName, address1, address2, city, state, zip, country } = req.body;
+
+  try {
+    // Call the function to insert the billing address into the database
+    const result = await insertBillingAddress(firstName, lastName, address1, address2, city, state, zip, country, userID);
+
+    // Respond with success message or inserted data
+    res.status(200).json({ message: 'Billing address inserted successfully', data: result });
+  } catch (error) {
+    // Handle errors
+    console.error('Error inserting billing address:', error);
+    res.status(500).json({ message: 'Error inserting billing address', error: error.message });
+  }
+}
+
+// Controller function for inserting payment method
+export async function insertPaymentMethodController(req, res) {
+  const userID = req.user.userID; 
+  const { nameOnCard, cardNumber, expiryDate, cvv } = req.body;
+
+  try {
+    // Call the function to insert the payment method into the database
+    const result = await insertPaymentMethod(nameOnCard, cardNumber, expiryDate, cvv, userID);
+
+    // Respond with success message or inserted data
+    res.status(200).json({ message: 'Payment method inserted successfully', data: result });
+  } catch (error) {
+    // Handle errors
+    console.error('Error inserting payment method:', error);
+    res.status(500).json({ message: 'Error inserting payment method', error: error.message });
   }
 }

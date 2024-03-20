@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { addDays } from "date-fns";
-import  './Event.css'
+import "./Event.css";
 
 const defaultTheme = createTheme();
 
@@ -91,32 +91,53 @@ export default function Event({ isAuthenticated }) {
       return;
     }
 
-
     try {
-      const formattedDate = startDate.toISOString().split("T")[0];
+      console.log("Start Date:", startDate); // Log the start date
+
+      function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+        const day = String(date.getDate()).padStart(2, '0');
+      
+        return `${year}-${month}-${day}`;
+      }
+      
+      const formattedDate = formatDate(startDate);
+      
+    console.log('Formatted Date:', formattedDate);
     
       const availabilitydata = {
         date: formattedDate,
         venue_id: data.get("venueid"),
         available: false, // Use colon instead of =
       };
-    
+
       const response = await axios.post(
         "http://localhost:4000/auth/availability",
         availabilitydata
       );
-    
+
       // Handle the response if needed
     } catch (error) {
       // Handle errors
       console.error("Error submitting form:", error);
       toast.error("An error occurred while creating the event.");
     }
-    
-  
 
     try {
-      const formattedDate = startDate.toISOString().split("T")[0];
+      console.log("Start Date:", startDate); // Log the start date
+
+      function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+        const day = String(date.getDate()).padStart(2, '0');
+      
+        return `${year}-${month}-${day}`;
+      }
+      
+      const formattedDate = formatDate(startDate);
+
+      console.log("Formatted Date:", formattedDate); // Log the formatted date
 
       const eventData = {
         eventName: data.get("eventname"),
@@ -150,8 +171,7 @@ export default function Event({ isAuthenticated }) {
       console.error("Error submitting form:", error);
       toast.error("An error occurred while creating the event.");
     }
-
-  }
+  };
 
   const containerStyle = {
     background: "rgba(255, 255, 255, 0.18)",
@@ -180,7 +200,7 @@ export default function Event({ isAuthenticated }) {
         overflow: "hidden",
         minWidth: "100%",
         background: "trasparent",
-        height: "100vh",
+        minHeight: "100vh",
       }}
     >
       <ToastContainer style={{ margin: "0 auto" }} />
@@ -278,15 +298,17 @@ export default function Event({ isAuthenticated }) {
                 <DatePicker
                   selected={startDate}
                   id="eventdate"
-                  label="eventdate"
+                  label="Controlled picker"
                   width="100%"
+                  default='new date().toISOString()'
                   name="eventdate"
                   minDate={new Date()}
-                  maxDate={addDays(new Date(), 90)} // Set max date to 90 days from today
-                  excludeDates={excludedDates} // Use excludedDates directly
-                  onChange={(date) => setStartDate(date)} // Update selected date
-
-                  // className="custom-datepicker" // Add a custom class name
+                  maxDate={addDays(new Date(), 90)}
+                  excludeDates={excludedDates}
+                  onChange={(date) => {
+                    console.log("Selected Date:", date); // Log the selected date
+                    setStartDate(date);
+                  }}
                 />
 
                 <TextField

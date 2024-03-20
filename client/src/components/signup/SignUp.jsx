@@ -202,7 +202,7 @@ export default function SignUp({ setIsAuthenticated }) {
                   </Link>
                 </Grid> */}
                   <Grid item>
-                  <Link component={RouterLink} to="/login" variant="body2">
+                  <Link component={RouterLink} to="/login" style={{ fontSize: '14px' }}>
                   {"Already have an account? Log In"}
 </Link>
 

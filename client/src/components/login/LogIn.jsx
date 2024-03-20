@@ -138,6 +138,7 @@ export default function LogIn({ setIsAuthenticated }) {
         backgroundPosition: "center",
         display: "flex",
         justifyContent: "center",
+        fontSize:'18px'
       }}
     >
       <ToastContainer />
@@ -211,12 +212,13 @@ export default function LogIn({ setIsAuthenticated }) {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
+                    <Link href="#" variant="body3">
+                      {/* Forgot password? */}
+                      
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link component={RouterLink} to="/signup" variant="body2">
+                    <Link component={RouterLink} to="/signup" style={{ fontSize: '14px' }}>
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>
