@@ -23,7 +23,7 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<LogIn />} />
+      <Route path="/" element={<LogIn setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/venue" element={<Venue isAuthenticated={isAuthenticated} />} />

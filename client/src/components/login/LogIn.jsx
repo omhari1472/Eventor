@@ -58,57 +58,44 @@ export default function LogIn({ setIsAuthenticated }) {
           } else {
             navigate('/home'); // Redirect to the home page
           }
-            }, 1000);
+        }, 1000);
       } else {
         console.error("Login unsuccessful:", response.data.error);
 
-        // Check if the error object has a response property
-        if (response.data.error === "UserNotFound") {
-          toast.error("User not found. Please check your email.");
-        } else if (response.status === 401) {
-          if (response.data.error === "IncorrectPassword") {
-            toast.error("Incorrect password. Please try again.");
-          } else {
-            toast.error(
-              "Invalid credentials. Please check your email and password."
-            );
-          }
-        } else {
-          console.error("Login unsuccessful:", response.data.error);
-          toast.error(`An error occurred. Status Code: ${response.status}`);
-        }
+        // Handle login errors
+        handleLoginError(response);
       }
     } catch (error) {
       console.error("Error during login:", error);
 
-      // Check if the error object has a response property
-      if (error.response) {
-        // Log the entire response object for debugging purposes
-        console.log("Response object:", error.response);
+      // Handle login errors
+      handleLoginError(error);
+    }
+  };
 
-        // Extract the status code and provide specific messages based on it
-        const statusCode = error.response.status;
-        if (statusCode === 401) {
-          console.error("Login unsuccessful:", error.response.data.error);
-
-          if (error.response.data.error === "IncorrectPassword") {
-            toast.error("Incorrect password. Please try again.");
-          } else if (error.response.data.error === "UserNotFound") {
-            toast.error("User not found. Please check your email.");
-          } else {
-            toast.error(
-              "Invalid credentials. Please check your email and password."
-            );
-          }
+  const handleLoginError = (error) => {
+    if (error.response) {
+      const statusCode = error.response.status;
+      if (statusCode === 401) {
+        // Handle 401 unauthorized error
+        const errorMessage = error.response.data.error;
+        if (errorMessage === "IncorrectPassword") {
+          toast.error("Incorrect password. Please try again.");
+        } else if (errorMessage === "UserNotFound") {
+          toast.error("User not found. Please check your email.");
         } else {
-          console.error("Login unsuccessful:", error.response.data.error);
-          toast.error(`An error occurred. Status Code: ${statusCode}`);
+          toast.error(
+            "Invalid credentials. Please check your email and password."
+          );
         }
       } else {
-        // Log a general error message if the response property is not present
-        console.log("Unexpected error:", error);
-        toast.error("An unexpected error occurred. Please try again later.");
+        // Handle other HTTP errors
+        toast.error(`An error occurred. Status Code: ${statusCode}`);
       }
+    } else {
+      // Handle general errors
+      console.log("Unexpected error:", error);
+      toast.error("An unexpected error occurred. Please try again later.");
     }
   };
 
@@ -214,7 +201,6 @@ export default function LogIn({ setIsAuthenticated }) {
                   <Grid item xs>
                     <Link href="#" variant="body3">
                       {/* Forgot password? */}
-                      
                     </Link>
                   </Grid>
                   <Grid item>
