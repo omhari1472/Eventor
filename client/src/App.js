@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import SignUp from './components/signup/SignUp';
-import Welcome from './components/dashboard/Welcome.jsx';
 import LogIn from './components/login/LogIn';
 import Event from './components/event/Event';
 import Venue from './components/venue/Venue';
@@ -16,6 +15,10 @@ import Dashboard from './components/admin/Dashboard';
 import AdminUsers from './components/admin/AdminUsers';
 import AdminOrders from './components/admin/AdminOrders';
 import AdminDashboard from './components/admin/AdminDashboard';
+import AdminVenuePage from './components/admin/Adminvenue/AdminVenue';
+import AdminAddVenue from './components/admin/Adminvenue/AdminAddVenue';
+import Message from './components/admin/Adminvenue/Message';
+import AdminEvent from './components/admin/Adminvenue/AdminEvent';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,7 +30,6 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/venue" element={<Venue isAuthenticated={isAuthenticated} />} />
-        <Route path="/welcome" element={<Welcome />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/rsvp" element={<RSVPInvitation isAuthenticated={isAuthenticated} />} />
         <Route path="/checkout" element={<Checkout isAuthenticated={isAuthenticated} />} />
@@ -37,6 +39,10 @@ const App = () => {
         <Route path="/event" element={<Event isAuthenticated={isAuthenticated} />} />
         <Route path="/eventguest" element={<EventGuest isAuthenticated={isAuthenticated} />} />
         <Route path="/home" element={<Home isAuthenticated={isAuthenticated} />} />
+        <Route path="/adminvenue" element={<AdminVenuePage />} />
+        <Route path="/adminaddvenue" element={<AdminAddVenue />} />
+        <Route path="/message" element={<Message />} />
+        <Route path="/adminevent" element={<AdminEvent />} />
       </Routes>
     </>
   );

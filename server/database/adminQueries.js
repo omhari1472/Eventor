@@ -60,3 +60,18 @@ export async function getVenueAvailability(venueId) {
     throw new Error(`Error fetching venue availability: ${error.message}`);
   }
 }
+
+export async function updateVenue(venueID, venueName, capacity, address, contactInfo, price) {
+  try {
+    // Update venue data based on the provided venueID
+    const result = await pool.query(`
+      UPDATE venues 
+      SET venueName = ?, capacity = ?, address = ?, contactInfo = ?, price = ?
+      WHERE venueID = ?
+    `, [venueName, capacity, address, contactInfo, price, venueID]);
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}

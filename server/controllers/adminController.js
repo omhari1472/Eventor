@@ -3,7 +3,9 @@ import {
   deleteVenue,
   getVenueAvailability,
   postVenues,
+  updateVenue,
 } from "../database/adminQueries.js";
+import {pool} from '../database/db.js';
 
 export async function addVenuesController(req, res) {
   const { venueName, capacity, address, contactInfo, price } = req.body;
@@ -73,5 +75,45 @@ export async function getVenueAvailabilityController(req, res) {
     // Handle errors
     console.error('Error fetching venue availability:', error);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+}
+
+export async function updateVenueController(req, res) {
+  const { venueID } = req.params;
+  const { venueName, capacity, address, contactInfo, price } = req.body;
+
+  try {
+    // Assuming you have a function named updateVenue in your database service
+    // const updatedVenue = await updateVenue(venueID, { venueName, capacity, address, contactInfo, price });
+    const updatedVenue = await updateVenue(
+      venueID,
+      venueName,
+      capacity,
+      address,
+      contactInfo,
+      price
+    ); // Pass user email
+
+    if (!updatedVenue) {
+      return res.status(404).send({ error: "Venue not found" });
+    }
+
+    res.status(200).send({ message: "Venue updated successfully", updatedVenue });
+  } catch (error) {
+    console.error("Error updating venue:", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
+}
+
+
+export async function getMessage(req, res) {
+  try {
+    // Query to retrieve messages from the ContactFormSubmission table
+    const messages = await pool.query('SELECT * FROM ContactFormSubmission');
+
+    res.json(messages); // Send the messages as JSON response
+  } catch (error) {
+    console.error('Error retrieving messages:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
