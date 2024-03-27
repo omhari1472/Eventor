@@ -11,7 +11,6 @@ import {
   TableRow,
   TableCell,
 } from "@mui/material";
-import Button from "@mui/material/Button";
 import AdminHeader from "./AdminHeader";
 
 // Import tableCellClasses
@@ -45,8 +44,8 @@ const Message = () => {
     axios
       .get("http://localhost:4000/auth/messages")
       .then((response) => {
-        setMessages(response.data.flat());
-        console.log("Fetched messages:", response.data.flat());
+        setMessages(response.data[0]);
+        console.log("Fetched messages:", response.data[0]);
       })
       .catch((error) => {
         console.error("Error fetching messages:", error);

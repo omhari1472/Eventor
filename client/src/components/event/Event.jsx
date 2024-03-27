@@ -322,6 +322,7 @@ export default function Event({ isAuthenticated }) {
                   name="eventtime"
                   autoComplete="off"
                   autoFocus
+                  inputProps={{ step: 900 }} // Set the step attribute to one hour (3600 seconds)
                 />
 
                 <Button
