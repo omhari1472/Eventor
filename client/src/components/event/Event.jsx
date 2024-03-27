@@ -162,7 +162,7 @@ export default function Event({ isAuthenticated }) {
       // Handle the response as needed
       toast.success("Event created successfully!");
       console.log("Response from server:", response.data);
-      localStorage.setItem("eventData", eventData);
+      localStorage.setItem("eventData", JSON.stringify(eventData));
       setTimeout(() => {
         navigate("/checkout");
       }, 1000);

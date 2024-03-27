@@ -12,7 +12,12 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function AdminHeader() {
-  const pages = ["Home", "Add Venue", "Event List", "Messages"];
+  const pages = [
+    { name: "AdminVenue", route: "adminvenue" },
+    { name: "AdminAddVenue", route: "adminaddvenue" },
+    { name: "AdminEvent", route: "adminevent" },
+    { name: "Messages", route: "message" },
+  ];
 
   const navigate = useNavigate();
 
@@ -58,9 +63,9 @@ console.log(username);
                 {pages.map((page) => (
                   <li className="navbar-link">
                     <Button
-                      key={page}
+                      key={page.name}
                       component={Link}
-                      to={`/${page.toLowerCase().replace(" ", "")}`}
+                      to={`/${page.route}`}
                       sx={{
                         my: 0,
                         fontSize: "16px",
@@ -69,7 +74,7 @@ console.log(username);
                         display: "block",
                       }}
                     >
-                      {page}
+                      {page.name}
                     </Button>
                   </li>
                 ))}
@@ -152,6 +157,7 @@ const MenuItem = styled(BaseMenuItem)(
   &:last-of-type {
     border-bottom: none;
   }
+
 
   &:focus {
     outline: 3px solid ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};

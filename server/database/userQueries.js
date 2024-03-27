@@ -50,6 +50,20 @@ export async function getVenues() {
   }
 }
 
+export async function getVenueById(venueID) {
+  try {
+    const [rows, fields] = await pool.query('SELECT * FROM venues WHERE venueID = ?', [venueID]);
+    // Check if a venue with the specified ID was found
+    if (rows.length === 0) {
+      return null; // Return null if venue not found
+    }
+    return rows[0]; // Return the first row (should be the only row)
+  } catch (error) {
+    throw error;
+  }
+}
+
+
 export async function getEventGuest(userID) {
 
   const query = `

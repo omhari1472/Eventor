@@ -1,5 +1,5 @@
 import { createEvent, getAllEvents, insertBillingAddress, insertPaymentMethod, postEventGuest, submitContact } from '../database/eventQueries.js';
-import { deleteEventGuest, getEventGuest, getVenues } from '../database/userQueries.js';// Replace with your actual venue module
+import { deleteEventGuest, getEventGuest, getVenueById, getVenues } from '../database/userQueries.js';// Replace with your actual venue module
 
 export async function getVenuesController(req, res) {
   try {
@@ -10,6 +10,29 @@ export async function getVenuesController(req, res) {
     res.status(200).send({ venues });
   } catch (error) {
     console.error('Error fetching venues:', error);
+
+    // Adjust the response based on your error handling strategy
+    res.status(500).send({ error: 'Internal Server Error' });
+  }
+}
+
+export async function getVenueByIdController(req, res) {
+  try {
+    // Extract the venue ID from the request parameters
+    const { venueID } = req.params;
+
+    // Call the getVenueById function to fetch venue data by ID
+    const venue = await getVenueById(venueID);
+
+    // Check if the venue exists
+    if (!venue) {
+      return res.status(404).send({ error: 'Venue not found' });
+    }
+
+    // Adjust the response based on your application's needs
+    res.status(200).send({ venue });
+  } catch (error) {
+    console.error('Error fetching venue by ID:', error);
 
     // Adjust the response based on your error handling strategy
     res.status(500).send({ error: 'Internal Server Error' });

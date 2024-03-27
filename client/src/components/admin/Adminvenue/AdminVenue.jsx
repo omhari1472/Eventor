@@ -126,7 +126,8 @@ const AdminVenuePage = () => {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Venue Name</StyledTableCell>
+            <StyledTableCell>Serial No.</StyledTableCell>
+              <StyledTableCell align="right">Venue Name</StyledTableCell>
               <StyledTableCell align="right">Capacity</StyledTableCell>
               <StyledTableCell align="right">Address</StyledTableCell>
               <StyledTableCell align="right">Contact Info</StyledTableCell>
@@ -135,39 +136,47 @@ const AdminVenuePage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {venues.map((venue) => (
-              <StyledTableRow key={venue.id}>
-                <StyledTableCell component="th" scope="venue">
-                  {venue.venueName}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {venue.capacity}
-                </StyledTableCell>
-                <StyledTableCell align="right">{venue.address}</StyledTableCell>
-                <StyledTableCell align="right">
-                  {venue.contactInfo}
-                </StyledTableCell>
-                <StyledTableCell align="right">{venue.price}</StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button
-                    style={{ marginRight: "5px" }}
-                    variant="contained"
-                    color="success"
-                    onClick={() => handleEditClick(venue)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => handleDeleteClick(venue)}
-                  >
-                    Delete
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
+  {venues.map((venue, index) => (
+    <StyledTableRow key={venue.id}>
+      <StyledTableCell component="th" scope="row">
+        {index + 1}
+      </StyledTableCell>
+      <StyledTableCell align="right">
+        {venue.venueName}
+      </StyledTableCell>
+      <StyledTableCell align="right">
+        {venue.capacity}
+      </StyledTableCell>
+      <StyledTableCell align="right">
+        {venue.address}
+      </StyledTableCell>
+      <StyledTableCell align="right">
+        {venue.contactInfo}
+      </StyledTableCell>
+      <StyledTableCell align="right">
+        {venue.price}
+      </StyledTableCell>
+      <StyledTableCell align="right">
+        <Button
+          style={{ marginRight: "5px" }}
+          variant="contained"
+          color="success"
+          onClick={() => handleEditClick(venue)}
+        >
+          Edit
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => handleDeleteClick(venue)}
+        >
+          Delete
+        </Button>
+      </StyledTableCell>
+    </StyledTableRow>
+  ))}
+</TableBody>
+
         </Table>
       </TableContainer>
 

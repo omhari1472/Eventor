@@ -117,3 +117,23 @@ export async function getMessage(req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+
+export async function getAllEventsWithUserDetailsController(req, res) {
+  try {
+    // Perform a join operation to retrieve all events along with user details
+    const query = `
+      SELECT events.*, users.username, users.email 
+      FROM events 
+      INNER JOIN users ON events.userID = users.userID;
+    `;
+    const eventsWithUserDetails = await pool.query(query);
+
+    // Respond with all events along with user details
+    res.status(200).json({eventsWithUserDetails });
+  } catch (error) {
+    // Handle errors
+    console.error('Error fetching all events with user details:', error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+}
