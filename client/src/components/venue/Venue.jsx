@@ -39,6 +39,25 @@ export default function Venue({ isAuthenticated }) {
       });
   }, []);
 
+  
+  useEffect(() => {
+    if (selectedVenue) {
+      axios
+        .get(`http://localhost:4000/auth/venue/${selectedVenue.venueID}/availability`)
+        .then((response) => {
+          const formattedDates = response.data.availability.map(
+            (item) => new Date(item.date)
+          );
+          setExcludedDates(formattedDates);
+          console.log("Excluded Dates:", formattedDates); // Log excluded dates
+        })
+        .catch((error) => {
+          console.error("Error fetching venue availability:", error);
+        });
+    }
+  }, [selectedVenue]);
+  
+
   useEffect(() => {
     filterVenues(); // Update filtered venues whenever search query changes
   }, [searchQuery, locationFilter, priceFilter]);
@@ -79,8 +98,10 @@ export default function Venue({ isAuthenticated }) {
 
   const handleCardClick = (venue) => {
     setSelectedVenue(venue);
+    console.log("Selected Venue ID:", venue.venueID); // Log selected venue ID
     setIsModalOpen(true);
   };
+  
 
   const handleCloseModal = () => {
     setIsModalOpen(false);

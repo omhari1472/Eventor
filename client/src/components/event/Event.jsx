@@ -54,6 +54,7 @@ export default function Event({ isAuthenticated }) {
             (item) => new Date(item.date)
           );
           setExcludedDates(formattedDates);
+          console.log("fsndfd",excludedDates);
         })
         .catch((error) => {
           console.error("Error fetching venue availability:", error);
